@@ -1,0 +1,67 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+.container, .login-container { /* Apply styles to both .container and .login-container */
+    text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 50px auto;
+    max-width: 400px;
+    border: 1px solid #000;
+}
+
+.container p {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #FCA50E;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 8px;
+    width: 30%;
+    margin: 0 auto;
+}
+
+.login-container input[type="email"], .login-container input[type="password"] {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #000;
+    border-radius: 3px;
+}
+
+.login-button {
+    background-color: #4FA190;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    padding: 6px;
+}
+
+.play-game-button {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    background-color: #4FA190;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-bar-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+.nav-bar-container img {
+    width: 200px;
+    height: auto;
+}

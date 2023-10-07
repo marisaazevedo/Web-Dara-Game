@@ -1,20 +1,35 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Dara Game</title>
     <link rel="icon" href="src/img/logo-mini.png">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="src/css/style.css">
+    <script src="src/js/script.js"></script>
+    <script src="src/js/playGame.js"></script>
 </head>
-
 <body>
     <header>
         <div class="nav-bar-container">
-            <center> <img src="src/img/logo-dara-tw.png" alt="logo" width=200 height=auto> </center>
+            <center>
+                <img src="src/img/logo-dara-tw.png" alt="logo" width="200" height="auto">
+            </center>
         </div>
     </header>
-
-
+    <div class="login-container">
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <button class="login-button">Login</button>
+    </div>
+    <div class="container">
+        <p>Menu</p>
+        <br>
+        <br>
+        <button class="play-game-button" onclick="playGame()">Play Game</button>
+        <br>
+        <button class="play-game-button" onclick="playGame()">Rules</button>
+        <br>
+        <button class="play-game-button" onclick="playGame()">Classifications</button>
+    </div>
 </body>
 </html>

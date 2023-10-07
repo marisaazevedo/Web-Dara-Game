@@ -1,28 +1,22 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const navLinks = document.querySelectorAll("nav a");
-    const contentContainer = document.getElementById("content");
-
-    // Function to load content from a file
-    function loadContent(page) {
-        fetch(`${page}.html`)
-            .then(response => response.text())
-            .then(content => {
-                contentContainer.innerHTML = content;
-            })
-            .catch(error => {
-                console.error("Error loading content:", error);
-            });
-    }
-
-    // Add click event listeners to the navigation links
-    navLinks.forEach(link => {
-        link.addEventListener("click", function (e) {
-            e.preventDefault();
-            const page = this.getAttribute("data-page");
-            loadContent(page);
+// Função para carregar uma "subpágina" na área de conteúdo
+function loadPage(pageName) {
+    fetch(`pages/${pageName}.html`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('content').innerHTML = html;
+        })
+        .catch(error => {
+            console.error(`Erro ao carregar a página ${pageName}: ${error}`);
         });
-    });
+}
 
-    // Load the initial content (e.g., section1.html)
-    loadContent("section1");
+// Manipular os eventos de navegação (por exemplo, quando um link é clicado)
+window.addEventListener('popstate', event => {
+    const pageName = event.state.pageName || 'page1'; // Página padrão
+    loadPage(pageName);
 });
+
+// Carregar a página inicial ao carregar a SPA
+window.onload = () => {
+    loadPage('page1'); // Página inicial padrão
+}
