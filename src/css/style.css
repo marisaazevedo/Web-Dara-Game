@@ -11,9 +11,19 @@ body {
     padding: 20px;
     border-radius: 10px;
     margin: 50px auto;
-    max-width: 400px;
     border: 1px solid #000;
 }
+
+.container {
+    max-width: 500px;
+    height: 300px;
+
+}
+
+.login-container {
+    max-width: 300px;
+}
+
 
 .container p {
     font-size: 24px;
@@ -21,7 +31,7 @@ body {
     background-color: #FCA50E;
     color: #ffffff;
     border-radius: 10px;
-    padding: 8px;
+    padding: 15px;
     width: 30%;
     margin: 0 auto;
 }
@@ -30,21 +40,24 @@ body {
     padding: 5px;
     margin: 5px;
     border: 1px solid #000;
-    border-radius: 3px;
+    border-radius: 10px;
+    width: 280px;
 }
+
 
 .login-button {
     background-color: #4FA190;
     color: #ffffff;
     border: none;
-    border-radius: 3px;
-    padding: 6px;
+    border-radius: 10px;
+    padding: 7px;
+    margin-top: 10px;
 }
 
 .play-game-button {
     display: block;
     width: 100%;
-    padding: 10px 20px;
+    padding: 15px 20px;
     margin-bottom: 10px;
     background-color: #4FA190;
     color: #fff;
