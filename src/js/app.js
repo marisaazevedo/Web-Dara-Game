@@ -4,20 +4,31 @@ const homePage = document.getElementById('homePage');
 const gameBoard = document.getElementById('gameBoard');
 const rulesSection = document.getElementById('rules');
 const leaderboard = document.getElementById('Classifications'); 
+const gameSettings = document.getElementById('game-Settings');
 
 const boardContainer = document.getElementById('board');
+
+function SetGameSettings() {
+    gameBoard.style.display = 'none';
+    rulesSection.style.display = 'none';
+    leaderboard.style.display = 'none';
+    homePage.style.display = 'block';
+    gameSettings.style.display = 'block';
+}
 
 function startGame() {
     homePage.style.display = 'none';
     rulesSection.style.display = 'none';
     leaderboard.style.display = 'none';
     gameBoard.style.display = 'block';
+    gameSettings.style.display = 'none';
     render(boardContainer);
 }
 
 function showRules() {
     homePage.style.display = 'none';
     gameBoard.style.display = 'none';
+    gameSettings.style.display = 'none';
     rulesSection.style.display = 'block';
 }
 
@@ -25,6 +36,7 @@ function classification() {
     homePage.style.display = 'none';
     gameBoard.style.display = 'none';
     rulesSection.style.display = 'none';
+    gameSettings.style.display = 'none';
     leaderboard.style.display = 'block';
     
 }

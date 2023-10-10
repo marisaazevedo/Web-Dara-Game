@@ -6,11 +6,8 @@
     <link rel="icon" href="src/img/logo-mini.png">
     <link rel="stylesheet" href="src/css/style.css">
     <link rel="stylesheet" href="src/css/board.css">
-    <!-- 
-        <script src="src/js/script.js"></script>
-        <script src="src/js/app.js"></script>
-    <script src="src/js/playGame.js"></script> -->
 </head>
+
 <body>
     <div>
         <div id="homePage">
@@ -24,20 +21,55 @@
             <div class="login-container">
                 <input type="email" placeholder="Email">
                 <input type="password" placeholder="Password">
-                <br>
+                <br>    
                 <button class="login-button">Login</button>
             </div>
-            <div class="container">
+            <div class="menu-container">
                 <p>Menu</p>
                 <br>
                 <br>
-                <button class="play-game-button" onclick="startGame()">Play Game</button>
+                <center><button class="play-game-button" onclick="SetGameSettings()">Play Game</button></center>
                 <br>
-                <button class="play-game-button" onclick="showRules()">Rules</button>
+                <center><button class="play-game-button" onclick="showRules()">Rules</button></center>
                 <br>
-                <button class="play-game-button" onclick="classification()">Classifications</button>
+                <center><button class="play-game-button" onclick="classification()">Classifications</button></center>
             </div>
         </div>
+        
+        <div id="game-Settings" style="display: none;">
+            <div class="container-settings">
+                <h1>Game Settings</h1>
+                <br>
+                <div class="container-boardsize">
+                    <p1><b>Board size:</b></p1>
+                    <p>6 lines x 5 columns</p>
+                </div>
+                <div class="container-typegame">
+                    <p1><b>Type of game:</b></p1>
+                    <br>
+                    <select id="typeGame">
+                        <option class="gametypeselection" value="playerVsPlayer">Player vs Player</option>
+                        <option class="gametypeselection" value="playerVsComputer">Player vs Computer</option>
+                        <option class="gametypeselection" value="computerVsComputer">Computer vs Computer</option>
+                    </select>
+                </div>
+                <div class="container-piece">
+                    <br>
+                    <p1><b>Choose your color</b></p1>
+                    <br>
+                    <!-- Select player 1's piece color -->
+                    <label for="player1Color">Select Player 1's piece color:</label>
+                    <input type="color" id="player1Color" value="#ff0000">
+                    <br>
+                    <!-- Select player 2's piece color -->
+                    <label for="player2Color">Select Player 2's piece color:</label>
+                    <input type="color" id="player2Color" value="#0000ff">
+                </div>
+                <br>
+                <center><button class="play-game-button" id="startGameButton" onclick="startGame()">Start Game</button></center>
+            </div>
+        </div>
+
         <div id = "gameBoard" style="display: none;">
             <div class="board" id="board"></div>
         </div>
