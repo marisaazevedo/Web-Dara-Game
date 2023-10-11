@@ -17,11 +17,10 @@ body {
 .menu-container {
     max-width: 500px;
     height: 300px;
-
 }
 
 .login-container {
-    max-width: 300px;
+    width: 300px;
 }
 
 .menu-container p {
@@ -43,6 +42,13 @@ body {
     width: 280px;
 }
 
+.input-container {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    width: 280px;
+}
 
 .login-button {
     background-color: #4FA190;
@@ -85,7 +91,7 @@ body {
     margin: 50px auto;
     border: 1px solid #000;
     max-width: 700px;
-    height: 400px;
+    height: 340px;
 }
 
 .container-settings h1 {

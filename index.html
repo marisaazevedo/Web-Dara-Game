@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>Dara Game</title>
@@ -18,24 +19,27 @@
                     </center>
                 </div>
             </header>
-            <div class="login-container">
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Password">
-                <br>    
-                <button class="login-button">Login</button>
-            </div>
-            <div class="menu-container">
-                <p>Menu</p>
-                <br>
-                <br>
-                <center><button class="play-game-button" onclick="SetGameSettings()">Play Game</button></center>
-                <br>
-                <center><button class="play-game-button" onclick="showRules()">Rules</button></center>
-                <br>
-                <center><button class="play-game-button" onclick="classification()">Classifications</button></center>
-            </div>
         </div>
-        
+
+        <div id="login-register" class="login-container">
+            <input class="input-container" id="loginUser" type="user" placeholder="User">
+            <input class="input-container" id="loginPassword" type="password" placeholder="Password">
+            <br>
+            <button class="login-button" onclick="login()">Login</button>
+            <button class="login-button" onclick="register()">Register</button>
+        </div>
+
+        <div id="menuContainer" class="menu-container" style="display: none;">
+            <p>Menu</p>
+            <br>
+            <br>
+            <center><button class="play-game-button" onclick="SetGameSettings()">Play Game</button></center>
+            <br>
+            <center><button class="play-game-button" onclick="showRules()">Rules</button></center>
+            <br>
+            <center><button class="play-game-button" onclick="classification()">Classifications</button></center>
+        </div>
+
         <div id="game-Settings" style="display: none;">
             <div class="container-settings">
                 <h1>Game Settings</h1>
@@ -75,22 +79,22 @@
         </div>
         <div id="rules" style="display: none;">
             <h2>Dara Game Rules</h2>
-        
+
             <h3>Objective</h3>
             <p>Defeat your opponent by capturing their tokens so they can no longer form three in a row. The game ends when a player has only two tokens left.</p>
-        
+
             <h3>Game Components</h3>
             <ul>
                 <li>12 tokens, in two colors (or any distinguishable objects).</li>
                 <li>Game board set out in a 6x5 grid.</li>
             </ul>
-        
+
             <h3>Game Phases</h3>
             <ul>
                 <li><strong>Drop Phase:</strong> Players take turns placing their tokens on the board until all tokens are placed.</li>
                 <li><strong>Move Phase:</strong> Players take turns moving their tokens, attempting to create three in a row.</li>
             </ul>
-        
+
             <h3>Rules</h3>
             <ul>
                 <li>Players cannot have more than 3 tokens in a row.</li>
@@ -100,7 +104,7 @@
                 <li>Tokens forming three in a row cannot be removed during the Drop Phase.</li>
                 <li>Players cannot capture an opponent's token when it's part of a three in a row they made.</li>
             </ul>
-        
+
             <h3>Winning the Game</h3>
             <p>The game is won by the player who successfully reduces their opponent to only two tokens.</p>
         </div>
@@ -109,7 +113,7 @@
             <h2>1º maior da terra </h1>
             <h3>2ª não tão fixe</h2>
             <h4>3º Perdedor</h3>
-        </div> 
+        </div>
     </div>
     <script src="/src/js/app.js"></script>
 </body>
