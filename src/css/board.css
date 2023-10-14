@@ -13,3 +13,17 @@
     font-size: 36px;
     cursor: pointer;
 }
+
+.hole {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #4FA190;
+    display: inline-block;
+    margin: 5px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+

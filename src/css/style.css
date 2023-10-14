@@ -72,26 +72,69 @@ body {
     font-size: 16px;
 }
 
-.nav-bar-container {
+.small-indice-button {
+    display: block;
+    width: 100px;
+    height: auto;
+    padding: 15px 20px;
+    margin-bottom: 5px;
+    background-color: #4FA190;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 10px;
     text-align: center;
-    padding: 20px;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1; /* This ensures the logo takes available horizontal space */
+}
+
+.nav-bar-container {
     background-color: #ffffff;
 }
 
-.nav-bar-container img {
-    width: 200px;
-    height: auto;
+.nav-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Ensure the container takes full width */
+    padding: 0 20px; /* Optional padding to add space between the logo and buttons */
+    box-sizing: border-box; /* Include padding in the width calculation */
 }
+
+/* Optional: CSS to style the buttons and logo container */
+.button-container {
+    display: flex;
+    gap: 10px; /* Adjust the gap between buttons as needed */
+    margin-left: auto;
+}
+
+
 
 .container-settings {
     text-align: center;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    margin: 50px auto;
     border: 1px solid #000;
     max-width: 700px;
     height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center the content horizontally */
+    position: fixed;
+    right: 0; /* Position the container to the right */
+    top: 50%; /* Center the container vertically */
+    transform: translateY(-50%);
+    margin-right: 100px;
+    margin-bottom: auto;
+    margin-top: auto;
 }
 
 .container-settings h1 {
@@ -121,4 +164,25 @@ body {
     margin-top: 20px;
     height: 20px;
     border-radius: 100px;
+}
+
+.gameBoard {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #000;
+    max-width: 700px;
+    height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center the content horizontally */
+    position: fixed;
+    right: 0; /* Position the container to the right */
+    top: 50%; /* Center the container vertically */
+    transform: translateY(-50%);
+    margin-right: 100px;
+    margin-bottom: auto;
+    margin-top: auto;
 }
