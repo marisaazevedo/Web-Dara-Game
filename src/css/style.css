@@ -1,188 +1,288 @@
+/* Body */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f2f2f2;
-}
-
-.menu-container, .login-container { /* Apply styles to both .container and .login-container */
-    text-align: center;
     background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 50px auto;
-    border: 1px solid #000;
 }
 
-.menu-container {
-    max-width: 500px;
-    height: 300px;
+/* NavBar Style */
+
+.nav-bar-container {
+    background: #ffffff;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+    border-bottom: 6px double #FCA50E;
 }
+
+.logo-container {
+    display: flex;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex: 1;
+}
+
+/* Button Rules and LeaderBoard */
+
+.rules-leaderboard-container {
+    width: 350px;
+    height: 50px;
+    text-align: right;
+    display: flex;
+
+}
+
+.small-navbar-button {
+    color: #ffffff;
+    width: 130px;
+    margin-bottom: 5px;
+    margin-left: 7px;
+    background-color: #4FA190;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Login Style */
 
 .login-container {
-    width: 300px;
-}
-
-.menu-container p {
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #FCA50E;
-    color: #ffffff;
+    margin-top: 50px;
+    width: 400px;
+    height: 150px;
     border-radius: 10px;
-    padding: 15px;
-    width: 30%;
-    margin: 0 auto;
-}
-
-.login-container input[type="email"], .login-container input[type="password"] {
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid #000;
-    border-radius: 10px;
-    width: 280px;
+    border: none;
+    text-align: left;
 }
 
 .input-container {
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid #000;
+    background-color: #ffffff;
     border-radius: 10px;
-    width: 280px;
+    padding: 5px;
+    border: 1px solid #000;
+    width: 170px;
+    margin-top: 20px;
+    margin-bottom: 7px;
 }
 
 .login-button {
     background-color: #4FA190;
     color: #ffffff;
+    width: 90px;
     border: none;
     border-radius: 10px;
-    padding: 7px;
-    margin-top: 10px;
+    padding: 10px;
 }
 
-.play-game-button {
-    display: block;
-    width: 490px;
-    padding: 15px 20px;
-    margin-bottom: 10px;
+/* Curiosities Style */
+
+.curiosities-container {
     background-color: #4FA190;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.small-indice-button {
-    display: block;
-    width: 100px;
-    height: auto;
-    padding: 15px 20px;
-    margin-bottom: 5px;
-    background-color: #4FA190;
-    color: #fff;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    font-size: 10px;
-    text-align: center;
-}
-
-.logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1; /* This ensures the logo takes available horizontal space */
-}
-
-.nav-bar-container {
-    background-color: #ffffff;
-}
-
-.nav-bar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; /* Ensure the container takes full width */
-    padding: 0 20px; /* Optional padding to add space between the logo and buttons */
-    box-sizing: border-box; /* Include padding in the width calculation */
-}
-
-/* Optional: CSS to style the buttons and logo container */
-.button-container {
-    display: flex;
-    gap: 10px; /* Adjust the gap between buttons as needed */
-    margin-left: auto;
-}
-
-
-
-.container-settings {
-    text-align: center;
-    background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #000;
-    max-width: 700px;
-    height: 340px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; /* Center the content horizontally */
-    position: fixed;
-    right: 0; /* Position the container to the right */
-    top: 50%; /* Center the container vertically */
-    transform: translateY(-50%);
-    margin-right: 100px;
-    margin-bottom: auto;
-    margin-top: auto;
+    width: 870px;
+    margin: 100px auto;
 }
 
-.container-settings h1 {
+.curiosities-container h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 40px;
+    text-decoration: underline;
+}
+
+.curiosities-container ul {
+    list-style-type: disc;
+    padding-left: 40px;
+}
+
+.curiosities-container li {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+/* Settings Style */
+
+.game-settings-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    border: 6px double #4FA190;
+    width: 300px;
+    height: 405px;;
+    margin-right: 100px;
+    margin-top: 100px;
+}
+
+.game-settings-container h2 {
     font-size: 24px;
     font-weight: bold;
     background-color: #FCA50E;
     color: #ffffff;
     border-radius: 10px;
     padding: 15px;
-    width: 30%;
+    width: 50%;
     margin: 0 auto;
 }
 
-.container-settings p1 {
-    font-size: 18px;
-    margin-top: 0;
-}
-
-.container-settings p {
-    font-size: 18px;
-    margin-top: 0;
-}
-
-.gametypeselection {
-    display: flex;
-    justify-content: space-between;
+.container-boardsize, .container-typegame, .container-piece {
     margin-top: 20px;
-    height: 20px;
-    border-radius: 100px;
+    margin-bottom: 10px;
 }
 
-.gameBoard {
-    text-align: center;
+.play-game-button {
+    display: block;
+    width: 160px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background-color: #4FA190;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Rules Style */
+
+.rules-container {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #000;
-    max-width: 700px;
-    height: 340px;
+    width: 870px;
+    margin: 50px auto;
+}
+
+.rules-container h2 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 20px;
+    text-decoration: underline;
+}
+
+.rules-container h3 {
+    font-size: 20px;
+    color: #4FA190;
+    margin-top: 15px;
+}
+
+.rules-container p {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.rules-container ul {
+    list-style-type: disc;
+    padding-left: 40px;
+}
+
+.rules-container li {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Leaderboard Style */
+
+.leaderboard-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 700px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center; /* Center the content horizontally */
-    position: fixed;
-    right: 0; /* Position the container to the right */
-    top: 50%; /* Center the container vertically */
-    transform: translateY(-50%);
+    align-items: center;
+    margin: 50px auto;
+}
+
+.leaderboard-container h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 30px;
+    text-decoration: underline;
+}
+
+.podium {
+    display: flex;
+    justify-content: space-between;
+}
+
+.podium-item {
+    width: 80px;
+    flex: 1;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #4FA190;
+    color: #fff;
+}
+
+.podium-item:nth-child(2) {
+    background-color: #FCA50E;
+}
+
+.podium-item:nth-child(1), .podium-item:nth-child(3) {
+    margin-top: 40px;
+}
+
+.podium h2 {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.podium h3 {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+
+/* Board Style */
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start
+}
+
+.board-container {
+    width: 700px;
+    margin-left: 50px;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    margin-right: 50px;
+}
+
+.border-board-container {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-left: 100px;
     margin-right: 100px;
-    margin-bottom: auto;
-    margin-top: auto;
+    border-radius: 10px;
+    border: 6px double #4FA190;
+}
+
+.hole {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    border: 3px solid #4FA190;
+    display: inline-block;
+    margin: 5px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 36px;
+    cursor: pointer;
 }

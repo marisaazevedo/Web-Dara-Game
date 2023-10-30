@@ -3,6 +3,7 @@ let currentPlayer = 1;
 let player1Pieces = 3;
 let player2Pieces = 3;
 
+
 function initializeBoard(size) {
     const { rows, cols } = boardSizes[size];
     const newBoard = [];
@@ -11,6 +12,7 @@ function initializeBoard(size) {
     }
     return newBoard;
 }
+
 
 function drawBoard() {
     const boardElement = document.getElementById('board');
@@ -44,8 +46,6 @@ function drawBoard() {
         boardElement.appendChild(document.createElement('br'));
     }
 }
-
-
 
 
 function isInLimits(atual, section){
@@ -90,12 +90,11 @@ function makeMovePhase1(index) {
         switchPlayer();
         removeAllEventListeners();
         drawBoard();
-        return; 
+        return;
     } else {
         switchPlayer();
     }
 }
-
 
 
 function countSameColorInRow(board, col, row, cols ,currentPlayer) {
@@ -125,6 +124,7 @@ function countSameColorInRow(board, col, row, cols ,currentPlayer) {
     }
     return false; // Placement allowed
 }
+
 
 function countSameColorInColumn(board, col, row, rows, cols, color) {
     let countTop = 0;
@@ -282,6 +282,7 @@ function checkForThreeInARow(board, index, currentPlayer) {
     return false; // just a normal move
 }
 
+
 function removeOpponentPiece(event) {
     const { rows, cols } = boardSizes[boardSize];
 
@@ -297,7 +298,6 @@ function removeOpponentPiece(event) {
     }
     return;
 }
-
 
 
 function isGreyCell(index) {
@@ -320,6 +320,7 @@ function removeAllEventListeners() {
     });
 }
 
+
 function movePiece(fromIndex, toIndex) {
     const { cols } = boardSizes[boardSize];
 
@@ -328,14 +329,15 @@ function movePiece(fromIndex, toIndex) {
     if (board[toIndex] === null) {
         board[toIndex] = board[fromIndex];
         board[fromIndex] = null;
-        
+
         removeAllEventListeners(); // Clear event listeners after the move
         // Check for captures and winner here...
         // Switch player logic here...
-        
+
         drawBoard();
     }
 }
+
 
 function checkForWinner() {
     // Check if the current player has fewer than 3 pieces or no available moves
@@ -348,6 +350,7 @@ function checkForWinner() {
     return false;
 }
 
+
 function avaibleIndexsForPlayer(player) {
     let avaibleIndexs = [];
     for (let i = 0; i < board.length; i++) {
@@ -357,6 +360,7 @@ function avaibleIndexsForPlayer(player) {
     }
     return avaibleIndexs;
 }
+
 
 function avaibleIndexsForPiece(index) {
     const { rows, cols } = boardSizes[boardSize];
@@ -398,6 +402,7 @@ function makeMove(index) {
         makeMovePhase2(index);
     }
 }
+
 
 function switchPlayer() {
     currentPlayer = 3 - currentPlayer; // Switches between players 1 and 2
