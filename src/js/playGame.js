@@ -1,7 +1,9 @@
+
 let boardSize = '5x6';
 let currentPlayer = 1;
 let player1Pieces = 3;
 let player2Pieces = 3;
+
 
 
 function initializeBoard(size) {
@@ -15,6 +17,8 @@ function initializeBoard(size) {
 
 
 function drawBoard() {
+    const p1=window.gameConfig.player1Color;
+    const p2=window.gameConfig.player2Color;
     const boardElement = document.getElementById('board');
     boardElement.innerHTML = '';
     const { rows, cols } = boardSizes[boardSize];
@@ -29,9 +33,9 @@ function drawBoard() {
 
             // Set background color based on player and piece presence
             if (board[index] === 1) {
-                hole.style.backgroundColor = 'black'; // Player 1 color
+                hole.style.backgroundColor = p1; // Player 1 color
             } else if (board[index] === 2) {
-                hole.style.backgroundColor = 'red'; // Player 2 color
+                hole.style.backgroundColor = p2; // Player 2 color
             }
 
             // Add event listeners based on the current phase
@@ -415,6 +419,7 @@ document.getElementById('boardSize').addEventListener('change', function () {
     player2Pieces = 12;
     drawBoard();
 });
+
 
 const boardSizes = {
     '5x6': { rows: 5, cols: 6 },

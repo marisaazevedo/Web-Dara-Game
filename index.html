@@ -11,7 +11,10 @@
 
 <body>
     <header>
-        <div id="homePage" class="nav-bar-container">
+        <div id="homePage" class="nav-bar-container" style="display: block;">
+            <div class="logo-container">
+                <img src="src/img/logo-dara.png" alt="logo" width="200" height="auto">
+            </div>
             <div id="login-register" class="login-container">
                 <input class="input-container" id="loginUser" type="user" placeholder="User">
                 <input class="input-container" id="loginPassword" type="password" placeholder="Password">
@@ -19,12 +22,12 @@
                 <button class="login-button" onclick="login()">Login</button>
                 <button class="login-button" onclick="register()">Register</button>
             </div>
-
-            <div class="logo-container">
-                <img src="src/img/logo-dara.png" alt="logo" width="200" height="auto">
+            <div id="username" class="username-container" style="display: none;">
+                <p1 class="username" id="usernameText"> </p1>
+                <button id="logout" class="logout-button" onclick="logout()">Logout</button>
             </div>
 
-            <div class="rules-leaderboard-container">
+            <div class="button-container">
                 <button class="small-navbar-button" onclick="showRules()">Game Rules</button>
                 <button class="small-navbar-button" onclick="showLeaderboard()">Leaderboard</button>
             </div>
@@ -123,15 +126,26 @@
                     <option class="gametypeselection" value="playerVsPlayer">Player vs Player</option>
                 </select>
             </div>
+
+            <div class="container-first-to-start">
+                <br>
+                <p1><b>First to start:</b></p1>
+                <br>
+                <label for="player1FirstToStart">Player 1</label>
+                <input type="checkbox" id="player1FirstToStart" name="firstToStart" value="player1">
+                <label for="player2FirstToStart">Player 2</label>
+                <input type="checkbox" id="player2FirstToStart" name="firstToStart" value="player2">
+            </div>
+            
             <div class="container-piece">
                 <br>
                 <p1><b>Choose your color</b></p1>
                 <br>
                 <label for="player1Color">Player 1:</label>
-                <input type="color" id="player1Color" value="#ff0000">
+                <input type="color" id="player1Color" value="#000000">
                 <br>
                 <label for="player2Color">Player 2:</label>
-                <input type="color" id="player2Color" value="#0000ff">
+                <input type="color" id="player2Color" value="#FCA50E">
             </div>
             <br>
             <center><button class="play-game-button" id="startGameButton" onclick="startGame()">Start Game</button></center>
