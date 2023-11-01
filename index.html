@@ -52,6 +52,9 @@
         </ul>
     </div>
 
+    <div class="messageBox" id="messageBox"></div>
+
+
     <div class="rules-container" id="rules" style="display: none;">
         <h2>Dara Game Rules</h2>
 
@@ -103,9 +106,12 @@
     </div>
 
     <div class="flex-container">
+        <div class="piececounterL" id="piececounterL" style="display: block;"></div>
         <div class="border-board-container">
             <div class="board-container" id="board" style="display: block;"></div>
         </div>
+        <div class="piececounterR" id="piececounterR" style="display: block;"></div>
+
 
         <div class="game-settings-container" id="game-settings-section" style="display: block;">
             <h2>Game Settings</h2>
@@ -136,7 +142,7 @@
                 <label for="player2FirstToStart">Player 2</label>
                 <input type="checkbox" id="player2FirstToStart" name="firstToStart" value="player2">
             </div>
-            
+
             <div class="container-piece">
                 <br>
                 <p1><b>Choose your color</b></p1>
