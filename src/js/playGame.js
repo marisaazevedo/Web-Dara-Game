@@ -56,7 +56,7 @@ function drawBoard() {
             }else if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
                 phase = 2;
 
-            } else if (phase === 2) {
+            } else if (phase === 2 && removeFlag === false) {
                 countingpieces();
                 hole.addEventListener('click', () => makeMovePhase2(index));
             }
@@ -209,6 +209,7 @@ function countSameColorInColumn(board, col, row, rows, cols, color, index) {
 let selectedPieceIndex = null;
 
 let opponentPieceToRemoveIndex = null;
+
 function makeMovePhase2(index) {
     const {rows, cols} = boardSizes[boardSize];
 
@@ -236,33 +237,16 @@ function makeMovePhase2(index) {
             previousPlay2 = selectedPieceIndex;
             previousPiece2 = index;
         }
-        drawBoard();
-
+        
         // Check for three in a row after the move
         if (checkForThreeInARow(board, index, currentPlayer)) {
+            removeFlag = true;
+            drawBoard();
             displayMessage("You have three in a row! Click on any opponent's piece to remove it.");
-
-            // Handle the removal of the opponent's piece
-            const holes = document.querySelectorAll('.hole');
-            holes.forEach((hole) => {
-                hole.addEventListener('click', function() {
-                    const clickedIndex = parseInt(hole.getAttribute('data-row')) * cols + parseInt(hole.getAttribute('data-col'));
-                    if (board[clickedIndex] !== null && board[clickedIndex] !== currentPlayer) {
-                        board[clickedIndex] = null;
-                        currentPlayer === 1 ? player2Pieces++ : player1Pieces++;
-                        countingpieces();
-                        drawBoard();
-                        switchPlayer();
-                        drawBoard();
-
-                    } else {
-                        displayMessage("Invalid selection. Please choose an opponent's piece.");
-                    }
-                });
-                
-            });
+            clickRemove();
             
         } else {
+            drawBoard();
             switchPlayer();
         }
 
@@ -283,16 +267,56 @@ function makeMovePhase2(index) {
         displayMessage("Invalid move. Please select a grey cell to move.");
     }
 }
-
-
-function removeOpponentPiece(opponentIndex) {
-    // Remove the selected opponent's piece from the board
-    board[opponentIndex] = null;
-    drawBoard();
-    switchPlayer();
-    removeAllEventListeners();
-    displayMessage("Opponent's piece removed. Continue playing.");
+let removeFlag = false;
+function removeOpponentPiece(clickedIndex) {
+    
+    if (board[clickedIndex] !== null && board[clickedIndex] !== currentPlayer) {
+        board[clickedIndex] = null;
+        currentPlayer === 1 ? player2Pieces++ : player1Pieces++;
+        countingpieces();
+        switchPlayer();
+        removeFlag = false;
+        drawBoard();
+        return true; // Return true to indicate successful removal
+    } else {
+        displayMessage("Invalid selection. Please choose an opponent's piece.");
+        return false; // Return false to indicate unsuccessful removal
+    }
 }
+
+function clickRemove(){
+    const p1 = window.gameConfig.player1Color;
+    const p2 = window.gameConfig.player2Color;
+    const boardElement = document.getElementById('board');
+    boardElement.innerHTML = '';
+    const { rows, cols } = boardSizes[boardSize];
+    console.log("waiting for opponent piece to be removed");
+    // Wait for the opponent piece to be removed
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            const index = row * cols + col;
+            const hole = document.createElement('div');
+            hole.className = 'hole';
+            hole.setAttribute('data-row', row); // Add the data-row attribute
+            hole.setAttribute('data-col', col); // Add the data-col attribute
+            
+            // Set background color based on player and piece presence
+            if (board[index] === 1) {
+                hole.style.backgroundColor = p1; // Player 1 color
+            } else if (board[index] === 2) {
+                hole.style.backgroundColor = p2; // Player 2 color
+            }
+
+            hole.addEventListener('click', () => removeOpponentPiece(index));
+            boardElement.appendChild(hole);
+        }
+        boardElement.appendChild(document.createElement('br'));
+    }
+    
+}
+
+
+
 
 
 function checkForThreeInARow(board, index, currentPlayer) {
@@ -349,20 +373,7 @@ function checkForThreeInARow(board, index, currentPlayer) {
 }
 
 
-function removeOpponentPiece(event) {
-    const {rows, cols } = boardSizes[boardSize];
 
-    const cell = event.target;
-    const cellIndex = parseInt(cell.dataset.row) * cols + parseInt(cell.dataset.col);
-    if (board[cellIndex] !== currentPlayer && board[cellIndex] !== null) {
-        // If the clicked cell contains the opponent's piece, remove it
-        board[cellIndex] = null;
-        removeAllEventListeners(); // Clear event listeners after capturing the opponent's piece
-    } else {
-        displayMessage("Please select an opponent's piece.");
-    }
-    return;
-}
 
 
 function isGreyCell(index) {
