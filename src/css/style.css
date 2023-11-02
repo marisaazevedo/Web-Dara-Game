@@ -81,13 +81,15 @@ body {
 }
 
 .username-container {
-    margin-left: 5px;
+    margin-left: 10px;
+    width: fit-content;
+    margin-left: 20px;
     padding: 6px;
     margin-top: 20px;
     text-align: left;
-    width: 200px;
     border-radius: 10px;
     border: 2px solid #FCA50E;
+    text-align: center;
 }
 
 .username {
