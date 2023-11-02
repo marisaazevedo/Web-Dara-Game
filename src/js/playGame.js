@@ -1,7 +1,7 @@
 let boardSize = '5x6';
 let currentPlayer = 1;
-let player1Pieces = 2;
-let player2Pieces = 2;
+let player1Pieces = 4;
+let player2Pieces = 4;
 let player1PiecesCounter = 0;
 let player2PiecesCounter = 0;
 let phase = 1;
@@ -39,8 +39,13 @@ function drawBoard() {
                 hole.style.backgroundColor = p2; // Player 2 color
             }
 
+            if (checkForWinner() && phase === 2) {
+                gameOver();
+                return;
+            }
+
             // Add event listeners based on the current phase
-            if (player1Pieces > 0 || player2Pieces > 0 && phase === 1) {
+            if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1) {
                 countingpieces();
                 hole.addEventListener('click', () => makeMovePhase1(index));
             }else if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
@@ -88,6 +93,7 @@ function isInLimits(current, section){
 }
 
 function makeMovePhase1(index) {
+    console.log(index + " --------")
     if (board[index] !== null) {
         displayMessage('Invalid move. Please choose an empty hole.');
         return;
@@ -200,12 +206,10 @@ let selectedPieceIndex = null;
 let opponentPieceToRemoveIndex = null;
 function makeMovePhase2(index) {
     const {rows, cols} = boardSizes[boardSize];
-    if (checkForWinner()) {
-        gameOver();
-    }
+
+    // if the index is from the current player player (displaying the available moves)
     if (selectedPieceIndex === null && board[index] === currentPlayer) {
-        selectedPieceIndex = index;
-        removeAllEventListeners();
+        selectedPieceIndex = index; // Set the selected piece index to the other logic
         const availableMoves = availableIndexsForPiece(index);
 
         availableMoves.forEach((moveIndex) => {
@@ -213,15 +217,13 @@ function makeMovePhase2(index) {
             hole.style.backgroundColor = 'grey';
             hole.addEventListener('click', () => movePiece(selectedPieceIndex, moveIndex));
         });
-    } else if (selectedPieceIndex === index) {
+    } else if (selectedPieceIndex === index) { // if a piece is already selected and its pressed again, delete the selection
         selectedPieceIndex = null;
-        removeAllEventListeners();
         drawBoard();
-    } else if (board[index] === null && isGreyCell(index)) {
+    } else if (board[index] === null && isGreyCell(index)) { // if the index is a grey cell, move the piece        
         // Perform the move first
         movePiece(selectedPieceIndex, index);
         drawBoard();
-        removeAllEventListeners();
 
         // Check for three in a row after the move
         if (checkForThreeInARow(board, index, currentPlayer)) {
@@ -234,27 +236,34 @@ function makeMovePhase2(index) {
                     const clickedIndex = parseInt(hole.getAttribute('data-row')) * cols + parseInt(hole.getAttribute('data-col'));
                     if (board[clickedIndex] !== null && board[clickedIndex] !== currentPlayer) {
                         board[clickedIndex] = null;
-                        drawBoard();
                         currentPlayer === 1 ? player2Pieces++ : player1Pieces++;
+                        countingpieces();
+                        drawBoard();
                         switchPlayer();
-                        //alert("Opponent's piece removed. Continue playing.");
-                        //alert("Opponent's piece removed. Continue playing.");
+                        drawBoard();
 
                     } else {
                         displayMessage("Invalid selection. Please choose an opponent's piece.");
                     }
                 });
             });
+            
         } else {
             switchPlayer();
         }
 
+        if (checkForWinner()) {
+            gameOver();
+            return;
+        }
+
         selectedPieceIndex = null;
+        return;
     } else if (board[index] === null && selectedPieceIndex === null) {
         displayMessage("Please select your piece first.");
     } else if (board[index] === null && !isGreyCell(index)) {
         displayMessage("Invalid move. Please select a grey cell to move.");
-    } else if (selectedPieceIndex !== currentPlayer || board[index] !== currentPlayer && board[index] !== null) {
+    } else if ((board[selectedPieceIndex] !== currentPlayer || board[index] !== currentPlayer) && board[index] !== null) {
         displayMessage("This is not your piece.");
     } else {
         displayMessage("Invalid move. Please select a grey cell to move.");
@@ -397,9 +406,9 @@ function checkForWinner() {
 
 
 function gameOver() {
-    // Check if checkForWinner is true, then stop the game by refreshing the page
-    displayMessage('Game is over, refresing the page...')
-    location.reload()
+    // Check if checkForWinner is true, then stop the game by refreshing the page after wainting for 3 seconds
+    displayMessage('Game is over, refresing the page...'); 
+    setTimeout(location.reload(), 3000);
 
 }
 
