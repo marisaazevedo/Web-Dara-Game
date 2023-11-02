@@ -6,6 +6,9 @@ let player1PiecesCounter = 0;
 let player2PiecesCounter = 0;
 let phase = 1;
 
+let previousPlay1=-1;
+let previousPlay2=-1;
+
 
 function initializeBoard(size) {
     const { rows, cols } = boardSizes[size];
@@ -223,6 +226,12 @@ function makeMovePhase2(index) {
     } else if (board[index] === null && isGreyCell(index)) { // if the index is a grey cell, move the piece        
         // Perform the move first
         movePiece(selectedPieceIndex, index);
+        if (currentPlayer === 1) {
+            previousPlay1 = selectedPieceIndex;
+        }
+        else{
+            previousPlay2 = selectedPieceIndex;
+        }
         drawBoard();
 
         // Check for three in a row after the move
@@ -423,6 +432,15 @@ function availableIndexsForPlayer(player) {
     return availableIndexs;
 }
 
+function previousmove(index){
+    if (currentPlayer === 1 && previousPlay1 === index){
+        return true;
+    }
+    if (currentPlayer === 2 && previousPlay2 === index){
+        return true;
+    }
+    return false;
+}
 
 function availableIndexsForPiece(index) {
     const { rows, cols } = boardSizes[boardSize];
@@ -432,22 +450,22 @@ function availableIndexsForPiece(index) {
     let availableIndexs = [];
 
     // up 1
-    if (isInLimits(row - 1, rows) && board[(row - 1) * cols + col] === null && !countSameColorInColumn(board, col, row-1, rows, cols, currentPlayer, index) && !countSameColorInRow(board, col, row-1, cols, currentPlayer, index)) {
+    if (isInLimits(row - 1, rows) && board[(row - 1) * cols + col] === null && !countSameColorInColumn(board, col, row-1, rows, cols, currentPlayer, index) && !countSameColorInRow(board, col, row-1, cols, currentPlayer, index) && !previousmove((row - 1) * cols + col)) {
         availableIndexs.push((row - 1) * cols + col);
     }
 
     // down 1
-    if (isInLimits(row + 1, rows) && board[(row + 1) * cols + col] === null && !countSameColorInColumn(board, col, row+1, rows, cols, currentPlayer, index) && !countSameColorInRow(board, col, row+1, cols, currentPlayer, index)) {
+    if (isInLimits(row + 1, rows) && board[(row + 1) * cols + col] === null && !countSameColorInColumn(board, col, row+1, rows, cols, currentPlayer, index) && !countSameColorInRow(board, col, row+1, cols, currentPlayer, index) && !previousmove((row + 1) * cols + col)) {
         availableIndexs.push((row + 1) * cols + col);
     }
 
     // left 1
-    if (isInLimits(col - 1, cols) && board[row * cols + col - 1] === null && !countSameColorInRow(board, col - 1, row, cols, currentPlayer, index) && !countSameColorInColumn(board, col-1, row, rows, cols, currentPlayer, index)) {
+    if (isInLimits(col - 1, cols) && board[row * cols + col - 1] === null && !countSameColorInRow(board, col - 1, row, cols, currentPlayer, index) && !countSameColorInColumn(board, col-1, row, rows, cols, currentPlayer, index) && !previousmove(row * cols + col - 1)) {
         availableIndexs.push(row * cols + col - 1);
     }
 
     // right 1
-    if (isInLimits(col + 1, cols) && board[row * cols + col + 1] === null && !countSameColorInRow(board, col + 1, row, cols, currentPlayer, index) && !countSameColorInColumn(board, col+1, row, rows, cols, currentPlayer, index)) {
+    if (isInLimits(col + 1, cols) && board[row * cols + col + 1] === null && !countSameColorInRow(board, col + 1, row, cols, currentPlayer, index) && !countSameColorInColumn(board, col+1, row, rows, cols, currentPlayer, index) && !previousmove(row * cols + col + 1)) {
         availableIndexs.push(row * cols + col + 1);
     }
 
