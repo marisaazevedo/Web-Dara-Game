@@ -140,7 +140,7 @@ function makeMovePhase1(index) {
 }
 
 
-function countSameColorInRow(board, col, row, cols ,currentPlayer) {
+function countSameColorInRow(board, col, row, cols ,currentPlayer, index) {
     let countLeft = 0;
     let countRight = 0;
 
@@ -148,14 +148,14 @@ function countSameColorInRow(board, col, row, cols ,currentPlayer) {
     let currentc = col;
 
     for (let left=currentc-1; isInLimits(left,cols);left--){
-        if (board[row*cols+left] === currentPlayer){
+        if (board[row*cols+left] === currentPlayer && row*cols+left !== index){
             countLeft++;
         }
         else break;
     }
 
     for (let right=currentc+1; isInLimits(right,cols);right++){
-        if (board[row*cols+right] === currentPlayer){
+        if (board[row*cols+right] === currentPlayer && row*cols+right !== index){
             countRight++;
         }
         else break;
@@ -169,7 +169,7 @@ function countSameColorInRow(board, col, row, cols ,currentPlayer) {
 }
 
 
-function countSameColorInColumn(board, col, row, rows, cols, color) {
+function countSameColorInColumn(board, col, row, rows, cols, color, index) {
     let countTop = 0;
     let countBottom = 0;
 
@@ -177,7 +177,7 @@ function countSameColorInColumn(board, col, row, rows, cols, color) {
 
     // Count pieces above
     for (let top=currentc-1; isInLimits(top,rows);top--){
-        if (board[top*cols+col] === color){
+        if (board[top*cols+col] === color && top*cols+col !== index){
             countTop++;
         }
         else break;
@@ -185,7 +185,7 @@ function countSameColorInColumn(board, col, row, rows, cols, color) {
 
     // Count pieces below
     for (let bottom=currentc+1; isInLimits(bottom,rows);bottom++){
-        if (board[bottom*cols+col] === color){
+        if (board[bottom*cols+col] === color && bottom*cols+col !== index){
             countBottom++;
         }
         else break;
@@ -246,6 +246,7 @@ function makeMovePhase2(index) {
                         displayMessage("Invalid selection. Please choose an opponent's piece.");
                     }
                 });
+                
             });
             
         } else {
@@ -431,22 +432,22 @@ function availableIndexsForPiece(index) {
     let availableIndexs = [];
 
     // up 1
-    if (isInLimits(row - 1, rows) && board[(row - 1) * cols + col] === null && !countSameColorInColumn(board, col, row-1, rows, cols, currentPlayer)) {
+    if (isInLimits(row - 1, rows) && board[(row - 1) * cols + col] === null && !countSameColorInColumn(board, col, row-1, rows, cols, currentPlayer, index) && !countSameColorInRow(board, col, row-1, cols, currentPlayer, index)) {
         availableIndexs.push((row - 1) * cols + col);
     }
 
     // down 1
-    if (isInLimits(row + 1, rows) && board[(row + 1) * cols + col] === null && !countSameColorInColumn(board, col, row+1, rows, cols, currentPlayer)) {
+    if (isInLimits(row + 1, rows) && board[(row + 1) * cols + col] === null && !countSameColorInColumn(board, col, row+1, rows, cols, currentPlayer, index) && !countSameColorInRow(board, col, row+1, cols, currentPlayer, index)) {
         availableIndexs.push((row + 1) * cols + col);
     }
 
     // left 1
-    if (isInLimits(col - 1, cols) && board[row * cols + col - 1] === null && !countSameColorInRow(board, col - 1, row, cols, currentPlayer)) {
+    if (isInLimits(col - 1, cols) && board[row * cols + col - 1] === null && !countSameColorInRow(board, col - 1, row, cols, currentPlayer, index) && !countSameColorInColumn(board, col-1, row, rows, cols, currentPlayer, index)) {
         availableIndexs.push(row * cols + col - 1);
     }
 
     // right 1
-    if (isInLimits(col + 1, cols) && board[row * cols + col + 1] === null && !countSameColorInRow(board, col + 1, row, cols, currentPlayer)) {
+    if (isInLimits(col + 1, cols) && board[row * cols + col + 1] === null && !countSameColorInRow(board, col + 1, row, cols, currentPlayer, index) && !countSameColorInColumn(board, col+1, row, rows, cols, currentPlayer, index)) {
         availableIndexs.push(row * cols + col + 1);
     }
 
