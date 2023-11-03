@@ -4,6 +4,7 @@ let player1Pieces = 4;
 let player2Pieces = 4;
 let player1PiecesCounter = 0;
 let player2PiecesCounter = 0;
+let typeGame = 1;
 let phase = 1;
 
 let previousPlay1=-1;
@@ -494,19 +495,16 @@ function availableIndexsForPiece(index) {
     return availableIndexs;
 }
 
+function availableIndexs() {
+    list=[];
 
-function makeMove(index) {
-    if (player1Pieces > 0 || player2Pieces > 0) {
-        makeMovePhase1(index);
-        countingpieces();
-
-    } else {
-
-        countingpieces();
-        makeMovePhase2(index);
+    for (let i = 0; i < board.length; i++) {
+        if (board[i]===currentPlayer){
+            list.appendChild(i);
+        }
     }
+    return list;
 }
-
 
 function displayMessage(message) {
     const messageBox = document.getElementById('messageBox');
@@ -526,6 +524,18 @@ document.getElementById('boardSize').addEventListener('change', function () {
     drawBoard();
 });
 
+document.getElementById('typeGame').addEventListener('change', function () {
+    const selectedValue = this.value;
+    if (selectedValue === "PlayerVsComputer") {
+        difficulty.style.display = 'block'; // Show the difficulty container
+        typeGame = 1;
+    } else {
+        difficulty.style.display = 'none'; // Hide the difficulty container
+        typeGame = 2;
+    }
+});
+
+
 
 const boardSizes = {
     '5x6': { rows: 5, cols: 6 },
@@ -534,4 +544,109 @@ const boardSizes = {
 
 
 let board = initializeBoard(boardSize);
-drawBoard();
+drawBoardNoListenings();
+
+// drawBoard without event listeners
+function drawBoardNoListenings() {
+    const p1 = window.gameConfig.player1Color;
+    const p2 = window.gameConfig.player2Color;
+    const boardElement = document.getElementById('board');
+    boardElement.innerHTML = '';
+    const { rows, cols } = boardSizes[boardSize];
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            countingpieces();
+
+            const index = row * cols + col;
+            const hole = document.createElement('div');
+            hole.className = 'hole';
+            hole.setAttribute('data-row', row); // Add the data-row attribute
+            hole.setAttribute('data-col', col); // Add the data-col attribute
+
+            // Set background color based on player and piece presence
+            if (board[index] === 1) {
+                hole.style.backgroundColor = p1; // Player 1 color
+            } else if (board[index] === 2) {
+                hole.style.backgroundColor = p2; // Player 2 color
+            }
+
+            boardElement.appendChild(hole);
+        }
+        boardElement.appendChild(document.createElement('br'));
+    }
+}
+
+// drawboard ai
+function drawBoardAI() {
+    const p1 = window.gameConfig.player1Color;
+    const p2 = window.gameConfig.player2Color;
+    const boardElement = document.getElementById('board');
+    boardElement.innerHTML = '';
+    const { rows, cols } = boardSizes[boardSize];
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+
+            const index = row * cols + col;
+            const hole = document.createElement('div');
+            hole.className = 'hole';
+            hole.setAttribute('data-row', row); // Add the data-row attribute
+            hole.setAttribute('data-col', col); // Add the data-col attribute
+
+            // Set background color based on player and piece presence
+            if (board[index] === 1) {
+                hole.style.backgroundColor = p1; // Player 1 color
+            } else if (board[index] === 2) {
+                hole.style.backgroundColor = p2; // Player 2 color
+            }
+
+            if (phase === 2) {
+                if(checkForWinner() == 1) {
+                    gameOver(1);
+                    return;
+                }
+                else if(checkForWinner() == 2) {
+                    gameOver(2);
+                    return;
+                }
+            }
+
+            // Add event listeners based on the current phase
+            if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1) {
+                countingpieces();
+                hole.addEventListener('click', () => makeMovePhase1(index));
+            }else if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
+                phase = 2;
+
+            } else if (phase === 2 && removeFlag === false) {
+                countingpieces();
+                hole.addEventListener('click', () => makeMovePhase2(index));
+            }
+
+            boardElement.appendChild(hole);
+        }
+        boardElement.appendChild(document.createElement('br'));
+    }
+}
+
+function ComputerRandomPlayPhase1() {
+    const availableMoves = availableIndexs();
+    const randomIndex = Math.floor(Math.random() * availableIndexs.length);
+    const randomMove = availableMoves[randomIndex];
+    makeMove(randomMove);
+}
+
+function ComputerRandomPlayPhase2() {
+    let nextmoveindice=[];
+    const availableMoves = availableIndexs();
+    const randomIndex = Math.floor(Math.random() * availableIndexs.length);
+    nextmoveindice.push(randomIndex);
+    const randomMove = availableMoves[randomIndex];
+    nextmoveindice.push(randomMove);
+    return nextmoveindice;
+}
+
+function makeMovePhase2AI(index) {
+    nextmoveindice = ComputerRandomPlayPhase2();
+    }

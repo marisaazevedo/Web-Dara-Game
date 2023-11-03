@@ -8,7 +8,7 @@ const loginRegisterSection = document.getElementById('login-register');
 const logoutButton = document.getElementById('logout');
 const usernameCont = document.getElementById('username');
 const difficulty = document.getElementById('container-difficulty');
-
+const typeGameSelect = document.getElementById('typeGame');
 
 function showRules() {
     if(leaderboard.style.display === "block") {
@@ -59,29 +59,21 @@ window.gameConfig = {
     player2Color: '#FCA50E', // Default color for player 2
 };
 
+
 function startGame() {
     boardContainer.style.display = 'block';
     SetGameSettings.style.display = 'none';
     window.gameConfig.player1Color = document.getElementById('player1Color').value;
     window.gameConfig.player2Color = document.getElementById('player2Color').value;
 
-    // type of game var options
-    var selectElement = document.getElementById('typeGame');
+    const selectedValue = typeGameSelect.value;
+    console.log(selectedValue);
 
-    // Get the selected option value
-    var selectedValue = selectElement.value;
-
-    var typeGame;
-
-    // Map selected options to specific values
-    if (selectedValue === "PlayerVsPlayer") {
-        typeGame = 1;
-    } else if (selectedValue === "PlayerVsComputer") {
-        typeGame = 2;
-    }
-
-    if (typeGame === 2) {
-        difficulty.style.display = 'block';
+    // Check if the selected value is "PlayerVsComputer"
+    if (selectedValue === "PlayerVsComputer") {
+        difficulty.style.display = 'block'; // Show the difficulty container
+    } else {
+        difficulty.style.display = 'none'; // Hide the difficulty container
     }
 
     var player1Radio = document.querySelector('input[name="firstToStart"][value="player1"]');
