@@ -22,8 +22,17 @@ function initializeBoard(size) {
     return newBoard;
 }
 
-
 function drawBoard() {
+    if (typeGame === 1){
+        drawBoardAI();
+    }
+    else{
+        drawBoardPlayers();
+    }
+}
+
+
+function drawBoardPlayers() {
     const p1 = window.gameConfig.player1Color;
     const p2 = window.gameConfig.player2Color;
     const boardElement = document.getElementById('board');
@@ -136,8 +145,7 @@ function makeMovePhase1(index) {
         return;
     }
 
-    drawBoard();
-
+    
     if (player1Pieces === 0 && player2Pieces === 0) {
         switchPlayer();
         removeAllEventListeners();
@@ -147,6 +155,7 @@ function makeMovePhase1(index) {
     } else {
         switchPlayer();
     }
+    drawBoard();
 }
 
 
@@ -255,19 +264,9 @@ function makeMovePhase2(index) {
             clickRemove();
 
         } else {
-            drawBoard();
             switchPlayer();
+            drawBoard();
         }
-
-        if (checkForWinner(1)) {
-            gameOver(1);
-            return;
-        }
-        else if (checkForWinner(2)) {
-            gameOver(2);
-            return;
-        }
-
         selectedPieceIndex = null;
         return;
     } else if (board[index] === null && selectedPieceIndex === null) {
@@ -289,6 +288,7 @@ function removeOpponentPiece(clickedIndex) {
         countingpieces();
         switchPlayer();
         removeFlag = false;
+
         drawBoard();
         return true; // Return true to indicate successful removal
     } else {
@@ -303,7 +303,6 @@ function clickRemove(){
     const boardElement = document.getElementById('board');
     boardElement.innerHTML = '';
     const { rows, cols } = boardSizes[boardSize];
-    console.log("waiting for opponent piece to be removed");
     // Wait for the opponent piece to be removed
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -416,8 +415,7 @@ function movePiece(fromIndex, toIndex) {
         removeAllEventListeners(); // Clear event listeners after the move
         // Check for captures and winner here...
         // Switch player logic here...
-
-        drawBoard();
+        //drawBoard();
     }
 }
 
@@ -425,10 +423,11 @@ function movePiece(fromIndex, toIndex) {
 function checkForWinner() {
     // Check if the current player has fewer than 3 pieces or no available moves
     if (currentPlayer === 1 && (player1PiecesCounter - player1Pieces < 3 || availableIndexsForPlayer(1).length === 0) && phase===2) {
-
+        drawBoardNoListenings();
         return 1;
     }
     if (currentPlayer === 2 && (player2PiecesCounter - player2Pieces < 3 || availableIndexsForPlayer(2).length === 0) && phase===2) {
+        drawBoardNoListenings();
         return 2;
     }
     return false;
@@ -449,6 +448,7 @@ function availableIndexsForPlayer(player) {
     let availableIndexs = [];
     for (let i = 0; i < board.length; i++) {
         if (board[i] === player) {
+            
             availableIndexs = availableIndexs.concat(availableIndexsForPiece(i));
         }
     }
@@ -500,7 +500,7 @@ function availableIndexs() {
 
     for (let i = 0; i < board.length; i++) {
         if (board[i]===currentPlayer){
-            list.appendChild(i);
+            list.push(i);
         }
     }
     return list;
@@ -516,12 +516,16 @@ function switchPlayer() {
     displayMessage(`Player ${currentPlayer} turn`);
 }
 
+function otherPlayer() {
+    return 3 - currentPlayer;
+}
+
 document.getElementById('boardSize').addEventListener('change', function () {
     boardSize = this.value;
     board = initializeBoard(boardSize);
     player1Pieces = 12;
     player2Pieces = 12;
-    drawBoard();
+    drawBoardNoListenings();
 });
 
 document.getElementById('typeGame').addEventListener('change', function () {
@@ -577,8 +581,83 @@ function drawBoardNoListenings() {
     }
 }
 
-// drawboard ai
-function drawBoardAI() {
+
+
+function FreeHolesPhase1Ai() {
+    let availableIndexs = [];
+    const { rows, cols } = boardSizes[boardSize];
+
+    for (let i = 0; i < board.length; i++) {
+        if (board[i] === null) {
+            const row = Math.floor(i/ cols);
+            const col = i % cols;
+        
+            const horizontalCount = countSameColorInRow(board, col, row, cols, currentPlayer);
+            const verticalCount = countSameColorInColumn(board, col, row, rows, cols, currentPlayer);
+            
+            if (horizontalCount || verticalCount ) {
+                continue;
+            }
+            availableIndexs.push(i);
+        }
+    }
+    return availableIndexs;
+}
+
+
+function ComputerRandomPlayPhase1() {
+    const availableMoves = FreeHolesPhase1Ai();
+    const randomIndex = Math.floor(Math.random() * availableMoves.length);
+    makeMovePhase1AI(availableMoves[randomIndex]);
+}
+
+function ComputerRandomPlayPhase2() {
+    let SelectedAndMove=[];
+    let availableIndexss = availableIndexs();
+    let randomIndex = availableIndexss[Math.floor(Math.random() * availableIndexss.length)];
+
+    while (availableIndexsForPiece(randomIndex).length === 0){
+        randomIndex = availableIndexss[Math.floor(Math.random() * availableIndexss.length)];
+    }
+    SelectedAndMove.push(randomIndex);
+    let randomMove = availableIndexsForPiece(randomIndex)[Math.floor(Math.random() * availableIndexsForPiece(randomIndex).length)];
+    SelectedAndMove.push(randomMove);
+    previousPlay2 = randomIndex;
+    previousPiece2 = randomMove;
+    makeMovePhase2AI(SelectedAndMove);
+}
+
+function makeMovePhase1AI(index) {
+    board[index] = currentPlayer;
+    player2Pieces--;
+    player2PiecesCounter++;
+
+    if (player1Pieces === 0 && player2Pieces === 0) {
+        switchPlayer();
+        displayMessage("Phase 1 completed! Now proceed to Phase 2.")
+        return;
+    }
+    else {
+        switchPlayer();
+    }
+
+}
+
+function makeMovePhase2AI(indexes) {
+    movePiece(indexes[0], indexes[1]);
+    if (checkForThreeInARow(board, indexes[1], currentPlayer)) {
+        const availableIndexs = availableIndexsForPlayer(otherPlayer());
+        const randomIndex = Math.floor(Math.random() * availableIndexs.length);
+        board[availableIndexs[randomIndex]] = null;
+        currentPlayer === 1 ? player2Pieces++ : player1Pieces++;
+        countingpieces();
+    }
+    switchPlayer();
+
+}
+
+// player vs computer(Player2)
+function drawBoardAI(){
     const p1 = window.gameConfig.player1Color;
     const p2 = window.gameConfig.player2Color;
     const boardElement = document.getElementById('board');
@@ -587,13 +666,11 @@ function drawBoardAI() {
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
-
             const index = row * cols + col;
             const hole = document.createElement('div');
             hole.className = 'hole';
             hole.setAttribute('data-row', row); // Add the data-row attribute
             hole.setAttribute('data-col', col); // Add the data-col attribute
-
             // Set background color based on player and piece presence
             if (board[index] === 1) {
                 hole.style.backgroundColor = p1; // Player 1 color
@@ -611,17 +688,34 @@ function drawBoardAI() {
                     return;
                 }
             }
+            if (currentPlayer===1){
+                // Add event listeners based on the current phase
+                if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1) {
+                    countingpieces();
+                    
+                    hole.addEventListener('click', () => makeMovePhase1(index));
+                }else if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
+                    phase = 2;
+    
+                } else if (phase === 2 && removeFlag === false) {
+                    countingpieces();
+                    hole.addEventListener('click', () => makeMovePhase2(index));
 
-            // Add event listeners based on the current phase
-            if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1) {
-                countingpieces();
-                hole.addEventListener('click', () => makeMovePhase1(index));
-            }else if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
-                phase = 2;
+                }
 
-            } else if (phase === 2 && removeFlag === false) {
-                countingpieces();
-                hole.addEventListener('click', () => makeMovePhase2(index));
+            }
+
+            else if (currentPlayer===2){
+                if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1) {
+                    countingpieces();
+                    ComputerRandomPlayPhase1();
+                }else if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
+                    phase = 2;
+    
+                } else if (phase === 2 && removeFlag === false) {
+                    countingpieces();
+                    ComputerRandomPlayPhase2();
+                }
             }
 
             boardElement.appendChild(hole);
@@ -629,24 +723,3 @@ function drawBoardAI() {
         boardElement.appendChild(document.createElement('br'));
     }
 }
-
-function ComputerRandomPlayPhase1() {
-    const availableMoves = availableIndexs();
-    const randomIndex = Math.floor(Math.random() * availableIndexs.length);
-    const randomMove = availableMoves[randomIndex];
-    makeMove(randomMove);
-}
-
-function ComputerRandomPlayPhase2() {
-    let nextmoveindice=[];
-    const availableMoves = availableIndexs();
-    const randomIndex = Math.floor(Math.random() * availableIndexs.length);
-    nextmoveindice.push(randomIndex);
-    const randomMove = availableMoves[randomIndex];
-    nextmoveindice.push(randomMove);
-    return nextmoveindice;
-}
-
-function makeMovePhase2AI(index) {
-    nextmoveindice = ComputerRandomPlayPhase2();
-    }
