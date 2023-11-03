@@ -54,37 +54,38 @@
 
     <div class="messageBox" id="messageBox"></div>
 
+    <div class="container-appearinfront">
+        <div class="rules-container" id="rules" style="display: none;">
+            <h2>Dara Game Rules</h2>
 
-    <div class="rules-container" id="rules" style="display: none;">
-        <h2>Dara Game Rules</h2>
+            <h3>Objective</h3>
+            <p>Defeat your opponent by capturing their tokens so they can no longer form three in a row. The game ends when a player has only two tokens left.</p>
 
-        <h3>Objective</h3>
-        <p>Defeat your opponent by capturing their tokens so they can no longer form three in a row. The game ends when a player has only two tokens left.</p>
+            <h3>Game Components</h3>
+            <ul>
+                <li>12 tokens, in two colors (or any distinguishable objects).</li>
+                <li>Game board set out in a 6x5 grid.</li>
+            </ul>
 
-        <h3>Game Components</h3>
-        <ul>
-            <li>12 tokens, in two colors (or any distinguishable objects).</li>
-            <li>Game board set out in a 6x5 grid.</li>
-        </ul>
+            <h3>Game Phases</h3>
+            <ul>
+                <li><strong>Drop Phase:</strong> Players take turns placing their tokens on the board until all tokens are placed.</li>
+                <li><strong>Move Phase:</strong> Players take turns moving their tokens, attempting to create three in a row.</li>
+            </ul>
 
-        <h3>Game Phases</h3>
-        <ul>
-            <li><strong>Drop Phase:</strong> Players take turns placing their tokens on the board until all tokens are placed.</li>
-            <li><strong>Move Phase:</strong> Players take turns moving their tokens, attempting to create three in a row.</li>
-        </ul>
+            <h3>Rules</h3>
+            <ul>
+                <li>Players cannot have more than 3 tokens in a row.</li>
+                <li>Three in a row can only be formed orthogonally, not diagonally.</li>
+                <li>No diagonal moves are allowed.</li>
+                <li>During the Drop Phase, players cannot create three in a row.</li>
+                <li>Tokens forming three in a row cannot be removed during the Drop Phase.</li>
+                <li>Players cannot capture an opponent's token when it's part of a three in a row they made.</li>
+            </ul>
 
-        <h3>Rules</h3>
-        <ul>
-            <li>Players cannot have more than 3 tokens in a row.</li>
-            <li>Three in a row can only be formed orthogonally, not diagonally.</li>
-            <li>No diagonal moves are allowed.</li>
-            <li>During the Drop Phase, players cannot create three in a row.</li>
-            <li>Tokens forming three in a row cannot be removed during the Drop Phase.</li>
-            <li>Players cannot capture an opponent's token when it's part of a three in a row they made.</li>
-        </ul>
-
-        <h3>Winning the Game</h3>
-        <p>The game is won by the player who successfully reduces their opponent to only two tokens.</p>
+            <h3>Winning the Game</h3>
+            <p>The game is won by the player who successfully reduces their opponent to only two tokens.</p>
+        </div>
     </div>
 
     <div class="leaderboard-container" id="leaderboard" style="display: none;">
@@ -128,8 +129,18 @@
                 <p1><b>Type of game:</b></p1>
                 <br>
                 <select id="typeGame">
-                    <option class="gametypeselection" value="playerVsComputer">Player vs Computer</option>
-                    <option class="gametypeselection" value="playerVsPlayer">Player vs Player</option>
+                    <option class="gametypeselection" value="PlayerVsComputer">Player vs Computer</option>
+                    <option class="gametypeselection" value="PlayerVsPlayer">Player vs Player</option>
+                </select>
+            </div>
+
+            <div class="container-difficulty" id="container-difficulty" style="display: none;">
+                <br>
+                <p1><b>Difficulty:</b></p1>
+                <br>
+                <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="hard">Hard</option>
                 </select>
             </div>
 
@@ -138,9 +149,9 @@
                 <p1><b>First to start:</b></p1>
                 <br>
                 <label for="player1FirstToStart">Player 1</label>
-                <input type="checkbox" id="player1FirstToStart" name="firstToStart" value="player1">
+                <input type="radio" id="player1FirstToStart" name="firstToStart" value="player1" checked>
                 <label for="player2FirstToStart">Player 2</label>
-                <input type="checkbox" id="player2FirstToStart" name="firstToStart" value="player2">
+                <input type="radio" id="player2FirstToStart" name="firstToStart" value="player2">
             </div>
 
             <div class="container-piece">

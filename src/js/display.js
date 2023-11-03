@@ -7,7 +7,32 @@ const boardContainer = document.getElementById('board');
 const loginRegisterSection = document.getElementById('login-register');
 const logoutButton = document.getElementById('logout');
 const usernameCont = document.getElementById('username');
+const difficulty = document.getElementById('container-difficulty');
 
+
+function showRules() {
+    if(leaderboard.style.display === "block") {
+        leaderboard.style.display = "none";
+    }
+    if (rulesSection.style.display === "block") {
+        rulesSection.style.display = "none";
+    }
+    else if (rulesSection.style.display === "none"){
+        rulesSection.style.display = "block";
+    }
+}
+
+function showLeaderboard() {
+    if(rulesSection.style.display === "block") {
+        rulesSection.style.display = "none";
+    }
+    if (leaderboard.style.display === "block") {
+        leaderboard.style.display = "none";
+    }
+    else if (leaderboard.style.display === "none"){
+        leaderboard.style.display = "block";
+    }
+}
 
 function logout() {
     Curiosities.style.display = "block";
@@ -17,26 +42,6 @@ function logout() {
     leaderboard.style.display = "none";
     SetGameSettings.style.display = "none";
     boardContainer.style.display = 'none';
-    logoutButton.style.display = 'none';
-    usernameCont.style.display = 'none';
-}
-
-function showRules() {
-    usernameLabel.style.display = "block";
-    Curiosities.style.display = "none";
-    rulesSection.style.display = "block";
-    leaderboard.style.display = "none";
-    SetGameSettings.style.display = "none";
-    logoutButton.style.display = 'none';
-    usernameCont.style.display = 'none';
-}
-
-function showLeaderboard() {
-    usernameLabel.style.display = "block";
-    Curiosities.style.display = "none";
-    rulesSection.style.display = "none";
-    leaderboard.style.display = "block";
-    SetGameSettings.style.display = "none";
     logoutButton.style.display = 'none';
     usernameCont.style.display = 'none';
 }
@@ -55,16 +60,42 @@ window.gameConfig = {
 };
 
 function startGame() {
-    usernameLabel.style.display = 'block';
-    loginRegisterSection.style.display = 'none';
-    rulesSection.style.display = 'none';
-    leaderboard.style.display = 'none';
     boardContainer.style.display = 'block';
-    SetGameSettings.style.display = 'block';
-    logoutButton.style.display = 'none';
-    usernameCont.style.display = 'none';
+    SetGameSettings.style.display = 'none';
     window.gameConfig.player1Color = document.getElementById('player1Color').value;
     window.gameConfig.player2Color = document.getElementById('player2Color').value;
+
+    // type of game var options
+    var selectElement = document.getElementById('typeGame');
+
+    // Get the selected option value
+    var selectedValue = selectElement.value;
+
+    var typeGame;
+
+    // Map selected options to specific values
+    if (selectedValue === "PlayerVsPlayer") {
+        typeGame = 1;
+    } else if (selectedValue === "PlayerVsComputer") {
+        typeGame = 2;
+    }
+
+    if (typeGame === 2) {
+        difficulty.style.display = 'block';
+    }
+
+    var player1Radio = document.querySelector('input[name="firstToStart"][value="player1"]');
+    var player2Radio = document.querySelector('input[name="firstToStart"][value="player2"]');
+
+    // Check which one is selected and store it in the variable
+    if (player1Radio.checked) {
+        console.log('player1');
+        currentPlayer = 1;
+    } else if (player2Radio.checked) {
+        console.log('player2');
+        currentPlayer = 2;
+    }
+    drawBoard();
 }
 
 // Função de login
