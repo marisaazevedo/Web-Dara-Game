@@ -9,6 +9,7 @@ const logoutButton = document.getElementById('logout');
 const usernameCont = document.getElementById('username');
 const difficulty = document.getElementById('container-difficulty');
 const typeGameSelect = document.getElementById('typeGame');
+const resetGame = document.getElementById('reset');
 
 function showRules() {
     if(leaderboard.style.display === "block") {
