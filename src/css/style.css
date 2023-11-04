@@ -21,7 +21,18 @@ body {
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
+    cursor: pointer;
     /* Add other styles for this container */
+}
+
+.close {
+    /*class for closing button */
+    position: relative;
+    bottom: 370px;
+    left: 855px;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-size: 26px;
 }
 
 /* Button Rules and LeaderBoard */
