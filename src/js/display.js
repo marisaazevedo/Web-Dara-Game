@@ -125,3 +125,13 @@ function register() {
     const registerPassword = document.getElementById('registerPassword').value;
     alert('User registered successfully. You can now log in.');
 }
+
+function dismissMessage() {
+    var message = document.getElementById('curiosities-section');
+    message.style.display = 'none';
+}
+
+function refresh() {
+    location.reload();
+}
+
