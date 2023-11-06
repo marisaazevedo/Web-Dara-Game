@@ -78,6 +78,7 @@ function drawBoardPlayers() {
             if (phase === 2 && removeFlag === false) {
                 countingpieces();
                 console.log("MP2")
+                //flag=false;
                 hole.addEventListener('click', () => makeMovePhase2(index));
             }
 
@@ -242,12 +243,17 @@ function makeMovePhase2(index) {
             //console.log("here - "+  + board[moveIndex])
             hole.addEventListener('click', () => {
                 console.log("here - "+  + board[moveIndex])
-                if (flag === true) return;
+                availableIndexs.forEach((move2Index) => {
+                    const hole2 = document.querySelector(`[data-row='${Math.floor(move2Index / cols)}'][data-col='${move2Index % cols}']`);
+                    hole2.removeEventListener('click' , () => {
+                        console.log("here2 - "+  + board[moveIndex])
+                        makeMovePhase2(moveIndex);
+                    });
+                    hole2.style.backgroundColor = 'white';
+                });
                 makeMovePhase2(moveIndex);
                 console.log("flagchanged")
-                flag=true;
                 return;
-                removeAllEventListeners();
                 console.log("here2 - "+  + board[moveIndex])
             });
             //console.log("here2 - "+  + board[moveIndex])
@@ -457,10 +463,12 @@ function gameOver(number) {
     var reset = document.getElementById('resetGame')
     reset.style.display = 'block';
     if(number === 1){
+        displayMessage('');
         displayMessage("Player 1 wins!");
         updateLeaderboard(username, 'Win', player2PiecesCounter - player2Pieces);
     }
     else if(number === 2){
+        displayMessage('');
         displayMessage("Player 2 wins!");
         updateLeaderboard(username, 'Lose', player1PiecesCounter - player1Pieces);
     }
