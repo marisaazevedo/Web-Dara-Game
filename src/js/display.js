@@ -7,7 +7,7 @@ const boardContainer = document.getElementById('board');
 const loginRegisterSection = document.getElementById('login-register');
 const logoutButton = document.getElementById('logout');
 const usernameCont = document.getElementById('username');
-const chooseDifficulty = document.getElementById('container-difficulty');
+const difficulty = document.getElementById('container-difficulty');
 const typeGameSelect = document.getElementById('typeGame');
 const reset = document.getElementById('resetGame');
 const message = document.getElementById('messageBox');
@@ -17,6 +17,8 @@ const carouselcontainer = document.getElementById('carousel-container');
 const footer = document.getElementById('footer');
 const carousel = document.querySelector('.carousel');
 let carouselIndex = 0;
+
+
 
 function nextSlide() {
     carouselIndex = (carouselIndex + 1) % 4;
@@ -35,7 +37,6 @@ function showRules() {
     else if (rulesSection.style.display === "none"){
         rulesSection.style.display = "block";
     }
-    footer.style.display = 'none';
 }
 
 function showLeaderboard() {
@@ -51,19 +52,7 @@ function showLeaderboard() {
 }
 
 function logout() {
-    Curiosities.style.display = "block";
-    loginRegisterSection.style.display = "block";
-    usernameLabel.style.display = "none";
-    rulesSection.style.display = "none";
-    leaderboard.style.display = "none";
-    SetGameSettings.style.display = "none";
-    boardContainer.style.display = 'none';
-    logoutButton.style.display = 'none';
-    usernameCont.style.display = 'none';
-    pieceL.style.display = 'none';
-    pieceR.style.display = 'none';
-    footer.style.display = 'block';
-    carouselcontainer.style.display = 'block';
+    refresh();
 }
 
 function showGameSettings() {
@@ -72,7 +61,7 @@ function showGameSettings() {
     rulesSection.style.display = "none";
     leaderboard.style.display = "none";
     SetGameSettings.style.display = "block";
-    difficulty.style.display = 'block'
+    difficulty.style.display = 'block';
     footer.style.display = 'none';
 }
 
@@ -141,6 +130,7 @@ function login() {
         logoutButton.style.display = 'block';
         carouselcontainer.style.display = 'none';
         footer.style.display = 'none';
+        difficulty.style.display = 'block';
     } else {
         alert('Login failed. Please check your credentials.');
     }
@@ -165,6 +155,7 @@ function refresh() {
 
 function resetGame() {
     SetGameSettings.style.display = 'block';
+    difficulty.style.display = 'block';
     reset.style.display = 'none';
     boardContainer.style.display = 'block';
     displayMessage('');

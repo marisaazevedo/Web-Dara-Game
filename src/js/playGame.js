@@ -225,7 +225,7 @@ function makeMovePhase2(index) {
     console.log("MP2   --- "+ index + " - " + selectedPieceIndex);
     const {rows, cols} = boardSizes[boardSize];
 
-    // if the index is from the current player player (displaying the available moves)
+    // if the index is from the current player player (displaying the available moves)ficulty
     if (selectedPieceIndex === null && board[index] === currentPlayer) {
         selectedPieceIndex = index; // Set the selected piece index to the other logic
         console.log("check1   --- "+ index + " - " + selectedPieceIndex);
@@ -471,6 +471,9 @@ function gameOver(number) {
         displayMessage('');
         displayMessage("Player 2 wins!");
         updateLeaderboard(username, 'Lose', player1PiecesCounter - player1Pieces);
+    }
+    else if(number === 3){
+        displayMessage('');
     }
     reset.addEventListener('click', function () {
         boardSize = '5x6';

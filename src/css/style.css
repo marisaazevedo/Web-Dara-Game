@@ -319,13 +319,13 @@ body {
 
 .flex-container {
     display: flex;
-    width: fit-content;
+    /* width: fit-content; */
     justify-content: center;
     align-items: flex-start
 }
 
 .board-container {
-    width: fit-content;
+    width: 700px;
     margin-left: 50px;
     margin-bottom: 50px;
     margin-top: 50px;
@@ -338,7 +338,7 @@ body {
     margin-bottom: 100px;
     border-radius: 10px;
     border: 6px double #4FA190;
-    width: fit-content;
+    /* width: fit-content; */
 }
 
 .hole {
