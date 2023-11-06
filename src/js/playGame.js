@@ -144,11 +144,11 @@ function makeMovePhase1(index) {
         board[index] = currentPlayer;
         player2Pieces--;
         player2PiecesCounter++;
-    } 
+    }
 
     if (player1Pieces === 0 && player2Pieces === 0) {
         displayMessage("Phase 1 completed! Now proceed to Phase 2.")
-    } 
+    }
     switchPlayer();
     drawBoard();
 }
@@ -216,10 +216,11 @@ function countSameColorInColumn(board, col, row, rows, cols, color, index) {
 
 
 let selectedPieceIndex = null;
-
+let flag=false;
 let opponentPieceToRemoveIndex = null;
 
 function makeMovePhase2(index) {
+
     console.log("MP2   --- "+ index + " - " + selectedPieceIndex);
     const {rows, cols} = boardSizes[boardSize];
 
@@ -233,19 +234,28 @@ function makeMovePhase2(index) {
             selectedPieceIndex = null;
             return;
         }
+        console.log("---------------------------------")
         availableMoves.forEach((moveIndex) => {
+            console.log("MoveIndex           "+  + moveIndex)
             const hole = document.querySelector(`[data-row='${Math.floor(moveIndex / cols)}'][data-col='${moveIndex % cols}']`);
             hole.style.backgroundColor = 'grey';
             //console.log("here - "+  + board[moveIndex])
             hole.addEventListener('click', () => {
-                console.log("here - "+  + board[moveIndex])                
+                console.log("here - "+  + board[moveIndex])
+                if (flag === true) return;
                 makeMovePhase2(moveIndex);
+                console.log("flagchanged")
+                flag=true;
+                return;
+                removeAllEventListeners();
                 console.log("here2 - "+  + board[moveIndex])
             });
             //console.log("here2 - "+  + board[moveIndex])
-            
-            
+
+
         });
+        console.log("---------------------------------")
+
     } else if (selectedPieceIndex === index) { // if a piece is already selected and its pressed again, delete the selection
         selectedPieceIndex = null;
         drawBoard();
@@ -263,7 +273,7 @@ function makeMovePhase2(index) {
             previousPiece2 = index;
         }
         selectedPieceIndex = null;
-        
+
         // Check for three in a row after the move
         if (checkForThreeInARow(board, index, currentPlayer)) {
             removeFlag = true;
@@ -408,6 +418,7 @@ function removeAllEventListeners() {
         hole.removeEventListener('click', makeMovePhase1);
         hole.removeEventListener('click', movePiece);
         hole.removeEventListener('click', removeOpponentPiece);
+        hole.removeEventListener('click', makeMovePhase2);
 
     });
 }
@@ -425,30 +436,57 @@ function movePiece(fromIndex, toIndex) {
 }
 
 
+
+
+
 function checkForWinner() {
     // Check if the current player has fewer than 3 pieces or no available moves
     if (currentPlayer === 1 && (player1PiecesCounter - player1Pieces < 3 || availableIndexsForPlayer(1).length === 0) && phase===2) {
         drawBoardNoListenings();
-        return 1;
+        return 2;
     }
     if (currentPlayer === 2 && (player2PiecesCounter - player2Pieces < 3 || availableIndexsForPlayer(2).length === 0) && phase===2) {
         drawBoardNoListenings();
-        return 2;
+        return 1;
     }
     return false;
 }
 
 
 function gameOver(number) {
-    // Check if checkForWinner is true, then stop the game by refreshing the page after wainting for 3 seconds
+    var reset = document.getElementById('resetGame')
+    reset.style.display = 'block';
     if(number === 1){
         displayMessage("Player 1 wins!");
-        resetGame.style.display = 'block';
+        updateLeaderboard(username, 'Win', player2PiecesCounter - player2Pieces);
     }
     else if(number === 2){
         displayMessage("Player 2 wins!");
-        resetGame.style.display = 'block';
+        updateLeaderboard(username, 'Lose', player1PiecesCounter - player1Pieces);
     }
+    reset.addEventListener('click', function () {
+        boardSize = '5x6';
+        currentPlayer = 1;
+        player1Pieces = 4;
+        player2Pieces = 4;
+        player1PiecesCounter = 0;
+        player2PiecesCounter = 0;
+        selectedPieceIndex = null;
+        //let board = initializeBoard(boardSize);
+        for (let i = 0; i < board.length; i++) {
+            board[i] = null;
+        }
+        typeGame = 1;
+        phase = 1;
+        removeFlag = false;
+
+        previousPlay1=-1;
+        previousPiece1=-1;
+        previousPlay2=-1;
+        previousPiece2=-1;
+
+        drawBoardNoListenings();
+    });
 }
 
 function availableIndexsForPlayer(player) {
@@ -702,41 +740,428 @@ function drawBoardAI(){
                     console.log("check1    " + currentPlayer)
 
 
-                    
+
                 }
                 if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
                     console.log("phase2: " + row + " - " + col);
                     console.log("checkkkk    " + currentPlayer)
                     phase = 2;
 
-                } 
+                }
                 if (phase === 2 && removeFlag === false) {
-                    console.log("checkkkk2    " + currentPlayer)
+                    console.log("checkkkk2    " + currentPlayer + "    " + selectedPieceIndex)
                     countingpieces();
+                    flag=false;
                     hole.addEventListener('click', () => makeMovePhase2(index));
-
                 }
 
             } else break;
 
-            
+
             boardElement.appendChild(hole);
         }
         boardElement.appendChild(document.createElement('br'));
     }
-    if (currentPlayer===2){
+    if (currentPlayer === 2){
         if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1) {
             countingpieces();
-            ComputerRandomPlayPhase1();
-
+            if (difficultySelected === "random") {
+                ComputerRandomPlayPhase1();
+            }
+            else if(difficultySelected === "minimax") {
+                minimaxPhase1Play()
+            }
         }
         if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
             phase = 2;
-
         }
         if (phase === 2 && removeFlag === false && currentPlayer === 2) {
             countingpieces();
-            ComputerRandomPlayPhase2();
+            if(difficultySelected === "random") {
+                ComputerRandomPlayPhase2();
+            }
+            else if(difficultySelected === "minimax") {
+                minimaxPhase2Play();
+            }
         }
     }
+}
+
+function minimaxPhase2(depth, alpha, beta, playerPiecesCounterAI) {
+    if (depth === 0 || checkWinnerAI(playerPiecesCounterAI)) {
+        return { move: null, score: heuristicPhase2(playerPiecesCounterAI) };
+    }
+    let previous1=[previousPiece1, previousPlay1];
+    let previous2=[previousPiece2, previousPlay2];
+    let availableIndexss = availableIndexs(currentPlayer);
+    // maximizing player
+    if (currentPlayer === 2) {
+        let bestScore = -Infinity;
+        let bestMove = null;
+        for (let i = 0; i < availableIndexss.length; i++) {
+            let availableMoves = availableIndexsForPiece(availableIndexss[i]);
+            for (let j = 0; j < availableMoves.length; j++) {
+                let playerPiecesCounterAI2 = [playerPiecesCounterAI[0], playerPiecesCounterAI[1]];
+                let move = availableMoves[j];
+                let move2 = availableIndexss[i];
+                movePiece(move2, move);
+                previousPlay2 = move2;
+                previousPiece2 = move;
+                //let eval = heuristicPhase2(playerPiecesCounterAI2);
+
+                switchPlayer();
+                let eval=minimaxPhase2(depth - 1, alpha, beta, playerPiecesCounterAI2).score;
+                switchPlayer();
+                eval+=heuristicPhase2(playerPiecesCounterAI2);
+                movePiece(move, move2);
+                previousPlay2 = previous2[1];
+                previousPiece2 = previous2[0];
+                if (eval > bestScore) {
+                    bestScore = eval;
+                    bestMove = [move2, move];
+                }
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+                previousPlay2 = previous2[1];
+                previousPiece2 = previous2[0];
+            }
+        }
+        return { move: bestMove, score: bestScore };
+    }
+    // minimizing player
+    if (currentPlayer === 1) {
+        let bestScore = Infinity;
+        let bestMove = null;
+        for (let i = 0; i < availableIndexss.length; i++) {
+            let availableMoves = availableIndexsForPiece(availableIndexss[i]);
+            for (let j = 0; j < availableMoves.length; j++) {
+                let playerPiecesCounterAI2 = [playerPiecesCounterAI[0], playerPiecesCounterAI[1]];
+                let move = availableMoves[j];
+                let move2 = availableIndexss[i];
+                movePiece(move2, move);
+                previousPlay1 = move2;
+                previousPiece1 = move;
+                playerPiecesCounterAI2[0]-=1;
+                //eval = heuristicPhase2(playerPiecesCounterAI2);
+                switchPlayer();
+                let eval=minimaxPhase2(depth - 1, alpha, beta, playerPiecesCounterAI2).score;
+                switchPlayer();
+                eval+=heuristicPhase2(playerPiecesCounterAI2);
+                movePiece(move, move2);
+                previousPlay1 = previous1[1];
+                previousPiece1 = previous1[0];
+                if (eval < bestScore) {
+                    bestScore = eval;
+                    bestMove = [move2, move];
+                }
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+                previousPlay1 = previous1[1];
+                previousPiece1 = previous1[0];
+            }
+        }
+        return { move: bestMove, score: bestScore };
+    }
+}
+
+
+
+
+
+function minimaxPhase2Play(){
+    let playerPiecesCounterAI = [player1Pieces, player2Pieces];
+    let bestMove = minimaxPhase2(3, -Infinity, Infinity, playerPiecesCounterAI).move;
+    previousPlay2 = bestMove[0];
+    previousPiece2 = bestMove[1];
+    //console.log("previous2:     "+ previousPiece2 + " - " + previousPlay2)
+    makeMovePhase2AI(bestMove);
+}
+
+
+function heuristicPhase2(piecesCounter) {
+    let score = 0;
+    let availableIndexss = availableIndexs(currentPlayer);
+
+
+
+
+    for (let i = 0; i < availableIndexss.length; i++) {
+        let removeIndex=null;
+        let numberof3=[];
+        if (checkForInARow(board, availableIndexss[i], currentPlayer,3)) {
+            console.log(checkForInARow(board, availableIndexss[i], currentPlayer,3))
+            score += 10000;
+            removeIndex=(piecesCounter[0], piecesCounter[1]);
+            if (currentPlayer===2) piecesCounter[1] -= 1;
+            else piecesCounter[0] -= 1;
+            numberof3.push(availableIndexss[i]);
+        }
+
+        if (checkForInARow(board, availableIndexss[i], otherPlayer(),3)) {
+            score -= 3000;
+            if (currentPlayer===2) piecesCounter[0] -= 1;
+            else piecesCounter[1] -= 1;
+        }
+        if (checkWinnerAI(piecesCounter) === 1) {
+            if (currentPlayer === 1) {
+                score += 6000;
+            } else {
+                score -= 6000;
+            }
+        } else if (checkWinnerAI(piecesCounter) === 2) {
+                if (currentPlayer === 2) {
+                    score += 6000;
+                } else {
+                    score -= 6000;
+                }
+        }
+        if (checkForInARow(board, availableIndexss[i], currentPlayer,2)) {
+            score += 1000;
+        }
+        if (checkForInARow(board, availableIndexss[i], otherPlayer(),2)) {
+            score -= 1000;
+        }
+        if (checkForInARow(board, availableIndexss[i], currentPlayer,1)) {
+            score -= 300;
+        }
+
+        let availableMoves = availableIndexsForPiece(availableIndexss[i]);
+        for (let j = 0; j < availableMoves.length; j++) {
+            let move = availableMoves[j];
+            let move2 = availableIndexss[i];
+            movePiece(move2, move);
+            //console.log("---- :"+ move2 + " - " + move + " " + currentPlayer   + " ----> " + checkForInARow(board, move, currentPlayer,3)   )
+            if (checkForInARow(board, move, currentPlayer,3)) {
+                score += 4000;
+                //console.log(currentPlayer+":score  : " + score)
+                if (currentPlayer==2) piecesCounter[1] -= 1;
+                else piecesCounter[0] -= 1;
+                //console.log("checkForInARow: "+ piecesCounter[0] + " - " + piecesCounter[1])
+            }
+            indicess=availableIndexss;
+            for (k = 0; k<indicess.length; k++){
+                for (int of numberof3){
+                    if (indicess[k] === int){
+                        score -= 7000;
+                    }
+                }
+            }
+            if (checkForInARow(board, move, currentPlayer,2)) {
+                score += 100;
+            }
+            if (checkForInARow(board, move, otherPlayer(),3)) {
+                if (currentPlayer===2) piecesCounter[0] -= 1;
+                else piecesCounter[1] -= 1;
+                score -= 5000;
+            }
+            if (checkForInARow(board, move, currentPlayer,1)) {
+                score -= 400;
+            }
+            movePiece(move, move2);
+        }
+/*         if (removeIndex !== null){
+            undoRemovePieceAi(removeIndex, piecesCounter[0], piecesCounter[1]);
+            if (currentPlayer===2) piecesCounter[1] += 1;
+            else piecesCounter[0] += 1;
+        } */
+    }
+    return score;
+}
+
+
+
+function checkWinnerAI(playerPiecesCounterAI) {
+    if ((player2PiecesCounter - playerPiecesCounterAI[1]< 3 || availableIndexsForPlayer(2).length === 0) && phase===2) {
+        return 1;
+    }
+    if ((player1PiecesCounter - playerPiecesCounterAI[0] < 3 || availableIndexsForPlayer(1).length === 0) && phase===2) {
+        return 2;
+    }
+    return false;
+}
+
+
+function checkForInARow(board1, index, currentPlayer, top){
+    const {rows, cols} = boardSizes[boardSize];
+    const row = Math.floor(index / cols);
+    const col = index % cols;
+
+    let countLeft = 0;
+    let countRight = 0;
+
+    let countTop = 0;
+    let countBottom = 0;
+
+
+    let currentc = col;
+
+    for (let left=currentc-1; isInLimits(left,cols); left--){
+        if (board1[row*cols+left] === currentPlayer){
+            countLeft++;
+        }
+        else break;
+    }
+
+    for (let right=currentc+1; isInLimits(right,cols);right++){
+        //console.log("right: "+ right + " - " + board1[row*cols+right])
+        if (board1[row*cols+right] === currentPlayer){
+            countRight++;
+        }
+        else break;
+    }
+
+    let current= row;
+
+    // Count pieces above
+    for (let top = current - 1; isInLimits(top,rows);top--){
+        if (board1[top * cols + col] === currentPlayer){
+            countTop++;
+        }
+        else break;
+    }
+
+    // Count pieces below
+    for (let bottom = current + 1; isInLimits(bottom, rows); bottom++){
+        if (board1[bottom * cols + col] === currentPlayer){
+            countBottom++;
+        }
+        else break;
+    }
+
+    //console.log(countTop+countBottom + " - " + countLeft+countRight)
+    if (countLeft + countRight === top-1 || countTop + countBottom === top-1) {
+        return true;
+    }
+    return false;
+}
+
+function removePieceAi(player2p, player1p){
+    const availableIndexss = availableIndexs(otherPlayer());
+    const randomIndex = Math.floor(Math.random() * availableIndexs.length);
+    board[availableIndexss[randomIndex]] = null;
+    currentPlayer === 1 ? player2p++ : player1p++;
+    return randomIndex;
+}
+function undoRemovePieceAi(index, player2p, player1p){
+    board[index] = otherPlayer();
+    currentPlayer === 1 ? player2p-- : player1p--;
+}
+
+
+function heuristicPhase1(move1) {
+    // tree in a line is not advantageous in phase 1
+    let score = 0;
+    let availableIndexs = FreeHolesPhase1Ai();
+    if (checkForInARow(board, move1, currentPlayer,2)) {
+        score += 1000;
+    }
+    if (checkForInARow(board, move1, otherPlayer(),3)) {
+        score -= 300;
+    }
+
+    // see if the opponent plays in middle zone of the board
+    if ( move1 == 2 || (move1 > 7 && move1 < 9) ||(move1 > 11 && move1 < 16) || (move1 > 18 && move1 < 20) || move1 == 23) {
+        score += 1000;
+    }
+    if (checkForInARow(board, move1, otherPlayer(),2)) {
+        score -= 100;
+    }
+    if (checkForInARow(board, move1, currentPlayer,1)) {
+        score -= 50;
+    }
+
+
+    for (let i = 0; i < availableIndexs.length; i++) {
+        let move = availableIndexs[i];
+        board[move] = currentPlayer;
+        player2Pieces--;
+        player2PiecesCounter++;
+        if (checkForInARow(board, move, currentPlayer,2)) {
+            score += 1000;
+        }
+        if (checkForInARow(board, move, otherPlayer(),3)) {
+            score -= 300;
+        }
+        // see if the opponent plays in middle zone of the board
+        if ( move == 2 || (move > 7 && move < 9) ||(move > 11 && move < 16) || (move > 18 && move < 20) || move == 23) {
+            score += 1000;
+        }
+        if (checkForInARow(board, move, otherPlayer(),2)) {
+            score -= 100;
+        }
+        if (checkForInARow(board, move, currentPlayer,1)) {
+            score -= 50;
+        }
+        board[move] = null;
+        player2Pieces++;
+        player2PiecesCounter--;
+    }
+    return score;
+}
+
+function minimaxPhase1(depth, alpha, beta) {
+    if (depth === 0 || checkForWinner() !== false) {
+        return { score: heuristicPhase1(), move: null };
+    }
+    if (currentPlayer === 2) {
+        let maxEval = -Infinity;
+        let bestMove = null;
+        let availableIndexs = FreeHolesPhase1Ai();
+        for (let i = 0; i < availableIndexs.length; i++) {
+            let move = availableIndexs[i];
+            board[move] = currentPlayer;
+            player2Pieces--;
+            player2PiecesCounter++;
+            let eval = minimaxPhase1(depth - 1, alpha, beta).score;
+            eval += heuristicPhase1(move);
+            board[move] = null;
+            player2Pieces++;
+            player2PiecesCounter--;
+            if (maxEval < eval) {
+                maxEval = eval;
+                bestMove = move;
+            }
+            alpha = Math.max(alpha, eval);
+            if (beta <= alpha) {
+                break;
+            }
+        }
+        return {score: maxEval,move: bestMove}
+    } else {
+        let minEval = Infinity;
+        let bestMove = null;
+        let availableIndexs = FreeHolesPhase1Ai();
+        for (let i = 0; i < availableIndexs.length; i++) {
+            let move = availableIndexs[i];
+            board[move] = currentPlayer;
+            player1Pieces--;
+            player1PiecesCounter++;
+
+            let eval = minimaxPhase1(depth - 1, alpha, beta).score;
+            eval += heuristicPhase1(move);
+
+            board[move] = null;
+            player1Pieces++;
+            player1PiecesCounter--;
+            if (minEval > eval) {
+                minEval = eval;
+                bestMove = move;
+            }
+            beta = Math.min(beta, eval);
+            if (beta <= alpha) {
+                break
+            }
+        }
+        return {score: minEval,move: bestMove}
+    }
+}
+
+
+function minimaxPhase1Play(){
+    let bestMove = minimaxPhase1(2, -Infinity, Infinity).move;
+    makeMovePhase1AI(bestMove);
 }

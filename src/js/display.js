@@ -7,9 +7,23 @@ const boardContainer = document.getElementById('board');
 const loginRegisterSection = document.getElementById('login-register');
 const logoutButton = document.getElementById('logout');
 const usernameCont = document.getElementById('username');
-const difficulty = document.getElementById('container-difficulty');
+const chooseDifficulty = document.getElementById('container-difficulty');
 const typeGameSelect = document.getElementById('typeGame');
-const resetGame = document.getElementById('reset');
+const reset = document.getElementById('resetGame');
+const message = document.getElementById('messageBox');
+const pieceR = document.getElementById('piececounterR');
+const pieceL = document.getElementById('piececounterL');
+const carouselcontainer = document.getElementById('carousel-container');
+const footer = document.getElementById('footer');
+const carousel = document.querySelector('.carousel');
+let carouselIndex = 0;
+
+function nextSlide() {
+    carouselIndex = (carouselIndex + 1) % 4;
+    carousel.style.transform = `translateX(-${carouselIndex * 100}%)`;
+}
+
+setInterval(nextSlide, 3000);
 
 function showRules() {
     if(leaderboard.style.display === "block") {
@@ -21,6 +35,7 @@ function showRules() {
     else if (rulesSection.style.display === "none"){
         rulesSection.style.display = "block";
     }
+    footer.style.display = 'none';
 }
 
 function showLeaderboard() {
@@ -45,6 +60,10 @@ function logout() {
     boardContainer.style.display = 'none';
     logoutButton.style.display = 'none';
     usernameCont.style.display = 'none';
+    pieceL.style.display = 'none';
+    pieceR.style.display = 'none';
+    footer.style.display = 'block';
+    carouselcontainer.style.display = 'block';
 }
 
 function showGameSettings() {
@@ -53,6 +72,8 @@ function showGameSettings() {
     rulesSection.style.display = "none";
     leaderboard.style.display = "none";
     SetGameSettings.style.display = "block";
+    difficulty.style.display = 'block'
+    footer.style.display = 'none';
 }
 
 window.gameConfig = {
@@ -60,6 +81,7 @@ window.gameConfig = {
     player2Color: '#FCA50E', // Default color for player 2
 };
 
+let difficultySelected = 'random';
 
 function startGame() {
     boardContainer.style.display = 'block';
@@ -68,7 +90,8 @@ function startGame() {
     window.gameConfig.player2Color = document.getElementById('player2Color').value;
 
     const selectedValue = typeGameSelect.value;
-    console.log(selectedValue);
+    difficultySelected = document.getElementById('difficulty').value;
+    console.log(difficultySelected);
 
     // Check if the selected value is "PlayerVsComputer"
     if (selectedValue === "PlayerVsComputer") {
@@ -89,6 +112,7 @@ function startGame() {
         currentPlayer = 2;
     }
     drawBoard();
+    footer.style.display = 'none';
 }
 
 // Função de login
@@ -112,7 +136,11 @@ function login() {
         loginRegisterSection.style.display = "none";
         boardContainer.style.display = 'block';
         username = loginUser;
+        pieceL.style.display = 'block';
+        pieceR.style.display = 'block';
         logoutButton.style.display = 'block';
+        carouselcontainer.style.display = 'none';
+        footer.style.display = 'none';
     } else {
         alert('Login failed. Please check your credentials.');
     }
@@ -126,12 +154,42 @@ function register() {
     alert('User registered successfully. You can now log in.');
 }
 
-function dismissMessage() {
-    var message = document.getElementById('curiosities-section');
-    message.style.display = 'none';
-}
+// function dismissMessage() {
+//     var message = document.getElementById('curiosities-section');
+//     message.style.display = 'none';
+// }
 
 function refresh() {
     location.reload();
 }
 
+function resetGame() {
+    SetGameSettings.style.display = 'block';
+    reset.style.display = 'none';
+    boardContainer.style.display = 'block';
+    displayMessage('');
+    footer.style.display = 'none';
+}
+
+function updateLeaderboard(username, winOrLoss, pieceCount) {
+    const leaderboardContainer = document.getElementById('leaderboard');
+    const leaderboardList = leaderboardContainer.querySelector('.leaderboard-list');
+
+    const newItem = document.createElement('div');
+    newItem.className = 'leaderboard-item';
+
+    const nameElement = document.createElement('p');
+    nameElement.textContent = username;
+
+    const resultElement = document.createElement('p');
+    resultElement.textContent = winOrLoss;
+
+    const countElement = document.createElement('p');
+    countElement.textContent = pieceCount;
+
+    newItem.appendChild(nameElement);
+    newItem.appendChild(resultElement);
+    newItem.appendChild(countElement);
+
+    leaderboardList.appendChild(newItem);
+}

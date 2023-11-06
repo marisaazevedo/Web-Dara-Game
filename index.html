@@ -34,6 +34,15 @@
         </div>
     </header>
 
+    <div class="carousel-container" id="carousel-container" style="display: block;">
+        <div class="carousel">
+            <img class="carousel-image" src="src/img/1.png" alt="Image 1">
+            <img class="carousel-image" src="src/img/2.png" alt="Image 2">
+            <img class="carousel-image" src="src/img/3.png" alt="Image 3">
+            <img class="carousel-image" src="src/img/4.png" alt="Image 4">
+        </div>
+    </div>
+
     <div class="curiosities-container" id="curiosities-section" style="display: block">
         <h2>Interesting Facts About the Dara Game in Nigeria</h2>
         <ul>
@@ -50,10 +59,8 @@
             <li>Dara has a long history, with archaeological evidence suggesting its existence dating back hundreds of years.
 
         </ul>
-        <span class="close" onclick="dismissMessage()">x</span>
+        <!-- <span class="close" onclick="dismissMessage()">x</span> -->
     </div>
-
-    <div class="messageBox" id="messageBox"></div>
 
     <div class="container-appearinfront">
         <div class="rules-container" id="rules" style="display: none;">
@@ -91,35 +98,30 @@
 
     <div class="leaderboard-container" id="leaderboard" style="display: none;">
         <h1>LEADERBOARD</h1>
-        <div class="podium">
-            <div class="podium-item">
-                <h2>2nd Place</h2>
-                <h3>Maior da Terra</h3>
-            </div>
-            <div class="podium-item">
-                <h2>1st Place</h2>
-                <h3>Não Tão Fixe</h3>
-            </div>
-            <div class="podium-item">
-                <h2>3rd Place</h2>
-                <h3>Perdedor</h3>
-            </div>
+        <div class="leaderboard-header">
+            <div class="leaderboard-header-item">Name</div>
+            <div class="leaderboard-header-item">Result</div>
+            <div class="leaderboard-header-item">Removed Pieces</div>
+        </div>
+        <div class="leaderboard-list"> </div>
         </div>
     </div>
 
-    <div class="reset-button" style="display: none;">
-        <button id="reset-container" onclick="resetGame()">Reset Game</button>
-    </div>
-
-    <div class="flex-container">
-        <div class="piececounterL" id="piececounterL" style="display: block;"></div>
-        <div class="border-board-container">
-            <div class="board-container" id="board" style="display: block;"></div>
+    <div class="flex-container" id="flex-container">
+        <div id="resetGame" class="reset-container" style="display: none;">
+            <button class="small-reset-button" onclick="resetGame()">Reset Game</button>
         </div>
-        <div class="piececounterR" id="piececounterR" style="display: block;"></div>
+
+        <div class="messageBox" id="messageBox"></div>
+
+        <div class="piececounterL" id="piececounterL" style="display: none;"></div>
+        <div class="border-board-container"  id="board" style="display: none;">
+            <div class="board-container" id="board"></div>
+        </div>
+        <div class="piececounterR" id="piececounterR" style="display: none;"></div>
 
 
-        <div class="game-settings-container" id="game-settings-section" style="display: block;">
+        <div class="game-settings-container" id="game-settings-section" style="display: none;">
             <h2>Game Settings</h2>
             <br>
             <div class="container-boardsize">
@@ -139,13 +141,13 @@
                 </select>
             </div>
 
-            <div class="container-difficulty" id="container-difficulty" style="display: block;">
+            <div class="container-difficulty" style="display: none;">
                 <br>
                 <p1><b>Difficulty:</b></p1>
                 <br>
                 <select id="difficulty">
-                    <option value="easy">Easy</option>
-                    <option value="hard">Hard</option>
+                    <option value="random">Random</option>
+                    <option value="minimax">Minimax (Beta)</option>
                 </select>
             </div>
 
@@ -174,8 +176,12 @@
         </div>
     </div>
 
+    <div class="footer" id="footer" style="display: block;">
+        <p>Web Tecnologies - FCUP. (2023)</p>
+        <p>Francisco Ribeiro, Marisa Azevedo, Diederik Dekker.</p>
+    </div>
+
     <script src="/src/js/display.js"></script>
     <script src="/src/js/playGame.js"></script>
 </body>
-
 </html>
