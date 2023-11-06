@@ -46,18 +46,6 @@ body {
     height: 974px;
 }
 
-/*
-.close {
-    position: relative;
-    bottom: 370px;
-    left: 855px;
-    cursor: pointer;
-    color: rgb(255, 255, 255);
-    font-size: 26px;
-}
-*/
-
-/* Button Rules and LeaderBoard */
 
 .button-container {
     align-items: center;

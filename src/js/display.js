@@ -21,7 +21,7 @@ let carouselIndex = 0;
 
 
 function nextSlide() {
-    carouselIndex = (carouselIndex + 1) % 4;
+    carouselIndex = (carouselIndex + 1) % 3;
     carousel.style.transform = `translateX(-${carouselIndex * 100}%)`;
 }
 
