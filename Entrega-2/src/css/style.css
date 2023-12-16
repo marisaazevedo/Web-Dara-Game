@@ -1,0 +1,443 @@
+/* Body */
+
+body {
+    background-color: #fff9f9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* NavBar Style */
+
+.nav-bar-container {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    border-bottom: 6px double #FCA50E;
+}
+
+.logo-container {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    /* Add other styles for this container */
+}
+
+/* Carousel Style */
+.carousel-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+    margin-bottom: 0px;
+    margin: 0;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-image {
+    flex: 0 0 100%;
+    height: 974px;
+}
+
+
+.button-container {
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    margin-left: 20px;
+    padding: 10px;
+}
+
+.small-navbar-button {
+    color: #ffffff;
+    width: 130px;
+    margin-right: 5px;
+    background-color: #4FA190;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Login Style */
+
+.login-container {
+    margin-left: 20px;
+    margin-top: 15px;
+    width: 400px;
+    height: 150px;
+    border-radius: 10px;
+    border: none;
+    text-align: left;
+}
+
+.input-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 5px;
+    border: 1px solid #000;
+    width: 170px;
+    margin-bottom: 7px;
+}
+
+.login-button {
+    background-color: #4FA190;
+    color: #ffffff;
+    width: 90px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.username-container {
+    margin-left: 10px;
+    width: fit-content;
+    margin-left: 20px;
+    padding: 6px;
+    margin-top: 20px;
+    text-align: left;
+    border-radius: 10px;
+    border: 2px solid #FCA50E;
+    text-align: center;
+}
+
+.username {
+    font-size: 16px;
+    color: #000;
+    margin-top: 20px;
+}
+
+.logout-button {
+    background-color: #4FA190;
+    color: #ffffff;
+    width: 90px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Curiosities Style */
+
+.curiosities-container {
+    background-color: #4FA190;
+    padding: 20px;
+    border-radius: 10px;
+    border: 6px double #ffffff;
+    width: 870px;
+    margin: 100px auto;
+    position: relative;
+}
+
+.curiosities-container h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 40px;
+    text-decoration: underline;
+}
+
+.curiosities-container ul {
+    list-style-type: disc;
+    padding-left: 40px;
+}
+
+.curiosities-container li {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+/* Settings Style */
+
+.game-settings-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    border: 6px double #4FA190;
+    width: 300px;
+    height: fit-content;
+    margin-right: 100px;
+    margin-top: 100px;
+}
+
+.game-settings-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #FCA50E;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    width: 200px;
+    margin: 0 auto;
+}
+
+.container-boardsize, .container-typegame, .container-piece {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.play-game-button {
+    display: block;
+    width: 160px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background-color: #4FA190;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Rules Style */
+
+.rules-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 500px; /* Reduce the width to 60% of the parent container */
+    position: absolute;
+    right: 5px; /* Position it on the right side */
+    top: 80px; /* Adjust the top position as needed */
+    border: 6px double #4FA190;
+    z-index: 2; /* Higher z-index to make it appear in front */
+}
+
+.rules-container h2 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 20px;
+    text-decoration: underline;
+}
+
+.rules-container h3 {
+    font-size: 20px;
+    color: #4FA190;
+    margin-top: 15px;
+}
+
+.rules-container p {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.rules-container ul {
+    list-style-type: disc;
+    padding-left: 40px;
+}
+
+.rules-container li {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Leaderboard Style */
+
+.leaderboard-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 500px;
+    position: absolute;
+    right: 5px;
+    top: 80px;
+    z-index: 2;
+    border: 6px double #4FA190;
+    display: block;
+}
+
+.leaderboard-container h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #000;
+    text-decoration: underline;
+}
+
+.leaderboard-item {
+    background-color: #FCA50E;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.leaderboard-item p {
+    font-size: 16px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.leaderboard-header {
+    background-color: #4FA190;
+    color: #ffffff;
+    border-radius: 10px;
+    border: 2px solid #000;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.leaderboard-header-item {
+    font-size: 16px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+/* Board Style */
+
+.flex-container {
+    display: flex;
+    /* width: fit-content; */
+    justify-content: center;
+    align-items: flex-start
+}
+
+.board-container {
+    width: 700px;
+    margin-left: 50px;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    margin-right: 50px;
+}
+
+.border-board-container {
+    background-color: #fff;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    border: 6px double #4FA190;
+    /* width: fit-content; */
+}
+
+.hole {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    border: 3px solid #4FA190;
+    display: inline-block;
+    margin: 5px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+
+
+.circlepiece {
+    /* make a smal circle for a piece*/
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #FCA50E;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.piececounterR {
+/*a retangle that contains the pieces that are being counted*/
+width: 70px;
+height: 735px;
+border-radius: 10px;
+background-color: #ffffff;
+margin-top: 100px;
+margin-right: 120px;
+margin-left: 20px;
+border: 6px double #4FA190;
+}
+
+.piececounterL {
+    /*a retangle that contains the pieces that are being counted*/
+    width: 70px;
+    height: 735px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    margin-top: 100px;
+    margin-right: 20px;
+    margin-left: 100px;
+    border: 6px double #4FA190;
+
+    }
+
+.messageBox {
+    /*message box*/
+    display: flex;
+    margin-top: 60px;
+    margin-bottom: 30px;
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000000;
+    height: 50px;
+    transform: translateX(-50%);
+    left: 50%;
+}
+
+.reset-container {
+    /*reset button*/
+    width: fit-content;
+    height: fit-content;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    border: 6px double #fff;
+    background-color: #FCA50E;
+    border-radius: 10px;
+    transform: translateX(-50%);
+    left: 50%;
+}
+
+.small-reset-button {
+    /*reset button*/
+    width: fit-content;
+    height: fit-content;
+    padding: 10px 15px;
+    align-items: center;
+    text-align: center;
+    background-color: #FCA50E;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Footer Style */
+.footer {
+    background-color: #a8a8a8;
+    color: #fff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #a8a8a8;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;
+}
