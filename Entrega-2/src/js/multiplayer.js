@@ -68,6 +68,11 @@ async function updategame(event) {
             }
             else if ("board" in json){
                 board = json.board;
+                console.log(board);
+                Promise.resolve(json.board).then(() => {
+                    countingPiecesServer();
+                    countingpieces();
+                });
                 if (json.phase == "drop") phase = 1;
                 else phase = 2;
                 players = Object.values(json.players);
@@ -109,6 +114,7 @@ async function drawBoardServer () {
     boardElement.innerHTML = '';
     const { rows, cols } = boardSizes[boardSize];
 
+
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             const hole = document.createElement('div');
@@ -137,8 +143,6 @@ async function drawBoardServer () {
             // Add event listeners based on the current phase
             if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1 && playerNumber === currentPlayer) {
                 displayMessage('Your turn! Place a piece on the board.');
-                countingPiecesServer();
-                countingpieces();
                 hole.addEventListener('click', async () => await makeMovePhase1Server(row, col));
             }
             if (playerNumber !== currentPlayer) {
@@ -149,8 +153,6 @@ async function drawBoardServer () {
                 phase = 2;
             }
             if (phase === 2 && removeFlag === false) {
-                countingPiecesServer();
-                countingPieces();
                 hole.addEventListener('click',async () => await makeMovePhase2(row,col));
             }
 
@@ -161,35 +163,36 @@ async function drawBoardServer () {
 }
 
 async function makeMovePhase1Server(row, col) {
-    if (board[row][col] !== 'empty') {
-        displayMessage('Invalid move. Please choose an empty hole.');
-        return;
-    }
-
     // Check if placing the piece would form more than 4 in a row in a line or column
     const { rows, cols } = boardSizes[boardSize];
 
     const horizontalCount = countSameColorInRow(board, col, row, cols, currentPlayer);
     const verticalCount = countSameColorInColumn(board, col, row, rows, cols, currentPlayer);
+    
+    if (board[row][col] !== 'empty') {
+        displayMessage('Invalid move. Please choose an empty hole.');
+        drawBoardServer();
+    }
 
-    if (horizontalCount || verticalCount ) {
+
+    else if (horizontalCount || verticalCount ) {
         displayMessage('Invalid move. Placing this piece would form more than 3 in a row.');
         return;
     }
 
-    if (currentPlayer === 1 && player1Pieces > 0 && playerNumber === currentPlayer) {
+    else if (currentPlayer === 1 && player1Pieces > 0 && playerNumber === currentPlayer) {
         board[row] [col] = 'white';
-        countingPiecesServer();
+        //countingPiecesServer();
         body = {"nick": username, "password": pass, "game": gameID, "move": {row: row, column: col}};
         notify(body);
     } else if (currentPlayer === 2 && player2Pieces > 0 && playerNumber === currentPlayer) {
         board[row][col] = 'black';
-        countingPiecesServer();
+        //countingPiecesServer();
         body = {"nick": username, "password": pass, "game": gameID, "move": {"row": row, "column": col}};
         notify(body);
     }
     else {
-        countingPiecesServer();
+        //countingPiecesServer();
         displayMessage('Not your turn!');
     }
 
@@ -200,14 +203,17 @@ async function makeMovePhase1Server(row, col) {
 }
 
 function countingPiecesServer(){
+    console.log("------countingPiecesServer------\n" + board);
     player1PiecesCounter = 0;
     player2PiecesCounter = 0;
     for(let i = 0; i < board.length; i++){
-        for(let j = 0; j < board.length; j++){
+        for(let j = 0; j < board[i].length; j++){
             if(board[i][j] === 'white') player1PiecesCounter++;
             else if(board[i][j] === 'black') player2PiecesCounter++;
         }
     }
     player1Pieces = 12 - player1PiecesCounter;
     player2Pieces = 12 - player2PiecesCounter;
+    console.log("player1Pieces: " + player1Pieces + " player1PiecesCounter: " + player1PiecesCounter);
+    console.log("player2Pieces: " + player2Pieces + " player2PiecesCounter: " + player2PiecesCounter);
 }
