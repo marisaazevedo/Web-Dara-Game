@@ -37,6 +37,7 @@ async function receive (request){
     return response;
 }
 
+let eventSource;
 
 async function constructGame(){
     
@@ -45,8 +46,8 @@ async function constructGame(){
     let data = await response.json();
     if ("game" in data) {
         gameID = data.game;
-        console.log(gameID);
-        await updategame();
+        eventSource = new EventSource(URL + 'update?nick=' + username + '&game=' + gameID);
+        eventSource.onmessage = updategame;
         return data;
     }
     else {
@@ -54,32 +55,13 @@ async function constructGame(){
     }     
 }
 
-async function updategame() {
-    // json = getcall('update?nick=' + username + '&game=' + gameID)
-    let json;
-    var eventSource = new EventSource(URL + 'update?nick=' + username + '&game=' + gameID);
-
-    let jsonPromise = new Promise((resolve, reject) => {
-        eventSource.onmessage = async function(message){
-            json = JSON.parse(message.data);
-            console.log(json);
-            if (json === null) {
-                console.log("Error updating game");
-                updategame();
-                reject("Error updating game");
-            }
-            else if (json !== null && "turn" in json) {
-                if (json.turn !== username) {
-                    console.log("Turn false")
-                    await updategame();
-                    
-                }
-            }
-            resolve(json);
-        }
-    });
-    jsonPromise.then((json) => {
-        ///console.log('aaaaa----------- \n' + json);
+async function updategame(event) {
+    let json = JSON.parse(event.data);
+    console.log(json);
+    if (json === null) {
+        console.log("Error updating game");
+    }
+    else if (json !== null && "turn" in json) {
         try {
             if ("error" in json){
                 console.log("Update in error");
@@ -102,12 +84,10 @@ async function updategame() {
         }
         catch {
             console.log("Update error");
-            //drawBoardServer();
         }
-    });
-    //updategame();
-    //drawBoardServer();
+    }
 }
+
 
 async function notify(body){
     let response = await postcall('notify', body);
@@ -156,25 +136,21 @@ async function drawBoardServer () {
 
             // Add event listeners based on the current phase
             if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1 && playerNumber === currentPlayer) {
+                displayMessage('Your turn! Place a piece on the board.');
+                countingPiecesServer();
                 countingpieces();
                 hole.addEventListener('click', async () => await makeMovePhase1Server(row, col));
             }
             if (playerNumber !== currentPlayer) {
                 displayMessage('Waiting for other player to play!');
-                await updategame();
             }
-            /*
-            else if ((player1Pieces > 0 || player2Pieces > 0) && phase === 1 && playerNumber !== currentPlayer){
-                await updategame();
-            }
-            */
             if(player1Pieces === 0 && player2Pieces === 0 && phase === 1){
+                displayMessage('Phase 1 completed! Now proceed to Phase 2.');
                 phase = 2;
             }
             if (phase === 2 && removeFlag === false) {
-                countingpieces();
-                //flag=false;
-                console.log("  BOARD324546  \n"+ board)
+                countingPiecesServer();
+                countingPieces();
                 hole.addEventListener('click',async () => await makeMovePhase2(row,col));
             }
 
@@ -203,26 +179,35 @@ async function makeMovePhase1Server(row, col) {
 
     if (currentPlayer === 1 && player1Pieces > 0 && playerNumber === currentPlayer) {
         board[row] [col] = 'white';
-        player1Pieces--;
-        player1PiecesCounter++;
+        countingPiecesServer();
         body = {"nick": username, "password": pass, "game": gameID, "move": {row: row, column: col}};
         notify(body);
-        await updategame();
     } else if (currentPlayer === 2 && player2Pieces > 0 && playerNumber === currentPlayer) {
         board[row][col] = 'black';
-        player2Pieces--;
-        player2PiecesCounter++;
+        countingPiecesServer();
         body = {"nick": username, "password": pass, "game": gameID, "move": {"row": row, "column": col}};
         notify(body);
-        await updategame();
     }
     else {
+        countingPiecesServer();
         displayMessage('Not your turn!');
-        //await updategame();
     }
 
     if (player1Pieces === 0 && player2Pieces === 0) {
         displayMessage("Phase 1 completed! Now proceed to Phase 2.")
     }
     drawBoardServer();
+}
+
+function countingPiecesServer(){
+    player1PiecesCounter = 0;
+    player2PiecesCounter = 0;
+    for(let i = 0; i < board.length; i++){
+        for(let j = 0; j < board.length; j++){
+            if(board[i][j] === 'white') player1PiecesCounter++;
+            else if(board[i][j] === 'black') player2PiecesCounter++;
+        }
+    }
+    player1Pieces = 12 - player1PiecesCounter;
+    player2Pieces = 12 - player2PiecesCounter;
 }
