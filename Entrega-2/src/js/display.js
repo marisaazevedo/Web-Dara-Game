@@ -8,7 +8,8 @@ const loginRegisterSection = document.getElementById('login-register');
 const logoutButton = document.getElementById('logout');
 const usernameCont = document.getElementById('username');
 const difficulty = document.getElementById('container-difficulty');
-const difficulty1 = document.getElementById('container-difficulty1');
+const difficultyPvsP = document.getElementById('container-difficulty1');
+const difficultySelectedPvsP = document.getElementById('difficulty1');
 const typeGameSelect = document.getElementById('typeGame');
 const reset = document.getElementById('resetGame');
 const message = document.getElementById('messageBox');
@@ -17,24 +18,42 @@ const pieceL = document.getElementById('piececounterL');
 const carouselcontainer = document.getElementById('carousel-container');
 const footer = document.getElementById('footer');
 const carousel = document.querySelector('.carousel');
+const firstStart = document.getElementById('first-to-start');
+const giveUpButton = document.getElementById('giveUp');
 let carouselIndex = 0;
 
+let difficultySelected;
 
 var selectedValue = typeGameSelect.value;
 
 typeGameSelect.addEventListener('change', function() {
     selectedValue = typeGameSelect.value;
-    updateDifficultyVisibility(); // Call a function to update the visibility of difficulty and difficulty1
+    updateDifficultyVisibility();
+});
+
+difficultySelectedPvsP.addEventListener('change', function() {
+    updateDifficultyVisibility();
 });
 
 function updateDifficultyVisibility() {
-    // Update the visibility based on the selectedValue
     if (selectedValue === "PlayerVsPlayer") {
-        difficulty1.style.display = 'block';
+        difficultyPvsP.style.display = 'block';
         difficulty.style.display = 'none';
+        if(difficultySelectedPvsP.value === "online") {
+            firstStart.style.display = 'none';
+            typeGame = 3;
+        }
+        else if(difficultySelectedPvsP.value === "local") {
+            firstStart.style.display = 'block';
+            typeGame = 2;
+        }
     } else if (selectedValue === "PlayerVsComputer") {
-        difficulty1.style.display = 'none';
+        typeGame = 1;
+        console.log("player vs computer check" + selectedValue);
+        difficultyPvsP.style.display = 'none';
         difficulty.style.display = 'block';
+        firstStart.style.display = 'block';
+        difficultySelected = document.getElementById('difficulty').value;
     }
 }
 
@@ -80,7 +99,6 @@ function showGameSettings() {
     rulesSection.style.display = "none";
     leaderboard.style.display = "none";
     SetGameSettings.style.display = "block";
-    updateDifficultyVisibility();
     footer.style.display = 'none';
 }
 
@@ -89,20 +107,18 @@ window.gameConfig = {
     player2Color: '#FCA50E', // Default color for player 2
 };
 
-let difficultySelected1 = 'online';
-
 function startGame() {
     boardContainer.style.display = 'block';
     SetGameSettings.style.display = 'none';
     window.gameConfig.player1Color = document.getElementById('player1Color').value;
     window.gameConfig.player2Color = document.getElementById('player2Color').value;
 
-    updateDifficultyVisibility();
-
     var player1Radio = document.querySelector('input[name="firstToStart"][value="player1"]');
     var player2Radio = document.querySelector('input[name="firstToStart"][value="player2"]');
 
-    constructGame();
+    if (typeGame === 3) {
+        constructGame();
+    }
     // Check which one is selected and store it in the variable
     if (player1Radio.checked) {
         console.log('player1');
@@ -112,6 +128,8 @@ function startGame() {
         currentPlayer = 2;
     }
     drawBoard();
+    giveUpButton.style.display = 'block';
+    reset.style.display = 'none';
     footer.style.display = 'none';
 }
 
@@ -142,7 +160,7 @@ function login() {
         })
         .catch(error => {
             alert('Problem conecting to the server. Please try again later.');
-            
+
         });
     }
     function loginSuccess(loginUser, loginPassword) {
@@ -162,8 +180,7 @@ function login() {
         logoutButton.style.display = 'block';
         carouselcontainer.style.display = 'none';
         footer.style.display = 'none';
-        difficulty1.style.display = 'block';
-        updateDifficultyVisibility();
+        difficultyPvsP.style.display = 'block';
     }
 
 
@@ -194,7 +211,7 @@ function register() {
         })
         .catch(error => {
             alert('Problem conecting to the server. Please try again later.');
-            
+
         });
 }
 
@@ -204,32 +221,25 @@ function refresh() {
 
 function resetGame() {
     SetGameSettings.style.display = 'block';
-    updateDifficultyVisibility();
     reset.style.display = 'none';
     boardContainer.style.display = 'block';
     displayMessage('');
     footer.style.display = 'none';
+    if (typeGame === 3) {
+
+    }
 }
 
-function updateLeaderboard(username, winOrLoss, pieceCount) {
-    const leaderboardContainer = document.getElementById('leaderboard');
-    const leaderboardList = leaderboardContainer.querySelector('.leaderboard-list');
-
-    const newItem = document.createElement('div');
-    newItem.className = 'leaderboard-item';
-
-    const nameElement = document.createElement('p');
-    nameElement.textContent = username;
-
-    const resultElement = document.createElement('p');
-    resultElement.textContent = winOrLoss;
-
-    const countElement = document.createElement('p');
-    countElement.textContent = pieceCount;
-
-    newItem.appendChild(nameElement);
-    newItem.appendChild(resultElement);
-    newItem.appendChild(countElement);
-
-    leaderboardList.appendChild(newItem);
+function giveUpGame() {
+    SetGameSettings.style.display = 'block';
+    boardContainer.style.display = 'block';
+    displayMessage('');
+    footer.style.display = 'none';
+    giveUpButton.style.display = 'none';
+    if (typeGame === 3) {
+        leave();
+    }
+    else{
+        gameOver(3 - currentPlayer);
+    }
 }

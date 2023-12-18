@@ -4,9 +4,8 @@ let player1Pieces = 12;
 let player2Pieces = 12;
 let player1PiecesCounter = 0;
 let player2PiecesCounter = 0;
-let typeGame = 1;
 let phase = 1;
-
+let typeGame = 3;
 let previousPlay1  = -1;
 let previousPiece1 = -1;
 let previousPlay2  = -1;
@@ -22,16 +21,14 @@ function initializeBoard(size) {
     return newBoard;
 }
 
-function drawBoard() {  
+function drawBoard() {
     if (typeGame === 1){
-        drawBoardServer();
-        //drawBoardAI();
+        drawBoardAI();
     }
     else if (typeGame === 2){
-        drawBoardServer();
-        //drawBoardPlayers();
+        drawBoardPlayers();
     }
-    else {
+    else if (typeGame === 3){
         drawBoardServer();
     }
 }
@@ -123,6 +120,7 @@ function isInLimits(current, section){
 
 function makeMovePhase1(index) {
     if (board[index] !== null) {
+        console.log("make move: index: " + index + " board: " + board);
         displayMessage('Invalid move. Please choose an empty hole.');
         return;
     }
@@ -450,20 +448,27 @@ function checkForWinner() {
 
 function gameOver(number) {
     var reset = document.getElementById('resetGame')
+    giveUpButton.style.display = 'none';
     reset.style.display = 'block';
     if(number === 1){
         displayMessage('');
         displayMessage("Player 1 wins!");
-        updateLeaderboard(username, 'Win', player2PiecesCounter - player2Pieces);
+        // updateLeaderboard(username, 'Win', player2PiecesCounter - player2Pieces);
     }
     else if(number === 2){
         displayMessage('');
         displayMessage("Player 2 wins!");
-        updateLeaderboard(username, 'Lose', player1PiecesCounter - player1Pieces);
+        // updateLeaderboard(username, 'Lose', player1PiecesCounter - player1Pieces);
     }
-    else if(number === 3){
-        displayMessage('');
+    else {
+        if (number !== null) {
+            displayMessage("Game over! The winner is " + number + "!");
+        }
+        else {
+            displayMessage("Game over! It's a draw!");
+        }
     }
+
     reset.addEventListener('click', function () {
         boardSize = '5x6';
         currentPlayer = 1;
@@ -472,11 +477,8 @@ function gameOver(number) {
         player1PiecesCounter = 0;
         player2PiecesCounter = 0;
         selectedPieceIndex = null;
-        //let board = initializeBoard(boardSize);
-        for (let i = 0; i < board.length; i++) {
-            board[i] = null;
-        }
-        typeGame = 1;
+
+        board = initializeBoard(boardSize);
         phase = 1;
         removeFlag = false;
 
@@ -485,7 +487,9 @@ function gameOver(number) {
         previousPlay2=-1;
         previousPiece2=-1;
 
+        console.log("before draw: " + board);
         drawBoardNoListenings();
+        console.log("after draw: " + board);
     });
 }
 
@@ -572,18 +576,6 @@ document.getElementById('boardSize').addEventListener('change', function () {
     player2Pieces = 12;
     drawBoardNoListenings();
 });
-
-document.getElementById('typeGame').addEventListener('change', function () {
-    const selectedValue = this.value;
-    if (selectedValue === "PlayerVsComputer") {
-        difficulty.style.display = 'block'; // Show the difficulty container
-        typeGame = 1;
-    } else {
-        difficulty.style.display = 'none'; // Hide the difficulty container
-        typeGame = 2;
-    }
-});
-
 
 
 const boardSizes = {

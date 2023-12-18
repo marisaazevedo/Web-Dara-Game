@@ -41,7 +41,6 @@ async function receive (request){
 let eventSource;
 
 async function constructGame(){
-    
     const { rows, cols } = boardSizes[boardSize];
     let response = await postcall('join', {"group": group, "nick": username, "password": pass, "size":{"rows": rows, "columns": cols}});
     let data = await response.json();
@@ -53,7 +52,7 @@ async function constructGame(){
     }
     else {
         console.log("Error constructing game");
-    }     
+    }
 }
 
 async function updategame(event) {
@@ -63,15 +62,21 @@ async function updategame(event) {
         console.log("Error updating game");
     }
     else if (json !== null) {
+        // && "turn" in json
         try {
             if ("error" in json){
                 console.log("Update in error");
-                if (json.error == "not your piece"){
-                    //drawBoardServer();
-                    console.log("Error: not your piece");
-                }
             }
             else if ("board" in json){
+                if ("winner" in json) {
+                    displayMessage('Game Over!');
+                    giveUpButton.style.display = 'none';
+                    reset.style.display = 'block';
+                    gameOver(json.winner);
+                    leaderboardRanking();
+                    closeServerEventSource();
+                    return;
+                }
                 board = json.board;
                 Promise.resolve(json.board).then(() => {
                     countingPiecesServer();
@@ -87,30 +92,19 @@ async function updategame(event) {
                 playerColor=json.players[username];
                 if (json.players[username] == "white") playerNumber = 1;
                 else playerNumber = 2;
-                
+
                 if (turn == username) currentPlayer = playerNumber;
                 else currentPlayer = 3 - playerNumber;
-                if ("winner" in json) {
-                    if (json.winner == username) {
-                        displayMessage("Congratulations! You won!");
-                    }
-                    else {
-                        displayMessage("You lost! Better luck next time!");
-                    }
-                    eventSource.close();
-                }
 
                 drawBoardServer();
-
             }
+
             else if ("winner" in json){
-                if (json.winner == username) {
-                    displayMessage("Congratulations! You won!");
-                }
-                else {
-                    displayMessage("You lost! Better luck next time!");
-                }
-                eventSource.close();
+                giveUpButton.style.display = 'none';
+                reset.style.display = 'block';
+                gameOver(json.winner);
+                leaderboardRanking();
+                closeServerEventSource();
             }
         }
         catch {
@@ -119,19 +113,49 @@ async function updategame(event) {
     }
 }
 
-
 async function notify(body){
     let response = await postcall('notify', body);
     let data = await response.json();
     return data;
 }
 
-async function leave(){
+async function leave() {
     let response = await postcall('leave', {nick: username, password: pass, game: gameID});
     let data = await response.json();
     return data;
 }
-            
+
+async function leaderboardRanking() {
+    const { rows, cols } = boardSizes[boardSize];
+
+    let response = await postcall('ranking', {"group": group, "size": {"rows": rows, "columns": cols}});
+    let data = await response.json();
+
+    updateLeaderboard(data.ranking);
+
+    return data;
+}
+
+async function closeServerEventSource() {
+    eventSource.close();
+}
+
+function updateLeaderboard(rankings) {
+    const leaderboardContainer = document.getElementById('leaderboard');
+    const leaderboardList = leaderboardContainer.querySelector('.leaderboard-list');
+
+    for (let i = 1; i < leaderboardList.rows.length; i++) {
+        leaderboardList.deleteRow(i);
+    }
+
+    rankings.forEach(ranking => {
+        const row = leaderboardList.insertRow(-1);
+        row.className = 'leaderboard-item';
+        row.insertCell(0).innerHTML = ranking.nick;
+        row.insertCell(1).innerHTML = ranking.victories;
+        row.insertCell(2).innerHTML = ranking.games;
+    })
+}
 
 async function drawBoardServer () {
     const p1 = window.gameConfig.player1Color;
@@ -140,6 +164,9 @@ async function drawBoardServer () {
     boardElement.innerHTML = '';
     const { rows, cols } = boardSizes[boardSize];
 
+    if (phase === 2 && (player1PiecesCounter === 2 || player2PiecesCounter === 2)) {
+        leave();
+    }
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -167,8 +194,8 @@ async function drawBoardServer () {
                 displayMessage('Your turn! Place a piece on the board.');
                 hole.addEventListener('click', async () => await makeMovePhase1Server(row, col));
             }
-            if (phase === 2 && playerNumber === currentPlayer) { 
-                displayMessage('Your turn! Move a piece.');        
+            if (phase === 2 && playerNumber === currentPlayer) {
+                displayMessage('Your turn! Move a piece.');
                 hole.addEventListener('click',async () => await makeMovePhase2Server(row,col));
             }
 
@@ -189,7 +216,7 @@ async function makeMovePhase1Server(row, col) {
 
     const horizontalCount = countSameColorInRowServer(board, col, row, cols, playerColor);
     const verticalCount = countSameColorInColumnServer(board, col, row, rows,  playerColor);
-    
+
     if (board[row][col] !== 'empty') {
         displayMessage('Invalid move. Please choose an empty hole.');
         drawBoardServer();
@@ -271,7 +298,7 @@ function countSameColorInRowServer (board, col, row, cols, color) {
     let countLeft = 0;
     let countRight = 0;
 
-    
+
     let currentc = col;
     try {
         currentc = col - 1;
@@ -293,9 +320,9 @@ function countSameColorInRowServer (board, col, row, cols, color) {
         }
     }
     catch { }
-    if (countRight >= 2) return true; 
-        
-        
+    if (countRight >= 2) return true;
+
+
     if (countLeft + countRight>= 3) return true;
     return false;
 }

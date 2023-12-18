@@ -96,18 +96,22 @@
 
     <div class="leaderboard-container" id="leaderboard" style="display: none;">
         <h1>LEADERBOARD</h1>
-        <div class="leaderboard-header">
-            <div class="leaderboard-header-item">Name</div>
-            <div class="leaderboard-header-item">Result</div>
-            <div class="leaderboard-header-item">Removed Pieces</div>
-        </div>
-        <div class="leaderboard-list"> </div>
-        </div>
+        <table class="leaderboard-list">
+            <tr class="leaderboard-header">
+                <th>Nickname</th>
+                <th>Victories</th>
+                <th>Games</th>
+            </tr>
+        </table>
     </div>
 
     <div class="flex-container" id="flex-container">
         <div id="resetGame" class="reset-container" style="display: none;">
             <button class="small-reset-button" onclick="resetGame()">Reset Game</button>
+        </div>
+
+        <div id="giveUp" class="giveup-container" style="display: none;">
+            <button class="small-giveup-button" onclick="giveUpGame()">Give Up</button>
         </div>
 
         <div class="messageBox" id="messageBox"></div>
@@ -139,7 +143,7 @@
                 </select>
             </div>
 
-            
+
             <div class="container-difficulty" style="display: none;" id="container-difficulty1">
                 <br>
                 <p1><b>Difficulty:</b></p1>
@@ -149,7 +153,7 @@
                     <option value="local">Local</option>
                 </select>
             </div>
-            
+
             <div class="container-difficulty" style="display: none;" id="container-difficulty">
                 <br>
                 <p1><b>Difficulty:</b></p1>
@@ -159,8 +163,8 @@
                     <option value="minimax">Minimax (Beta)</option>
                 </select>
             </div>
-            
-            <div class="container-first-to-start">
+
+            <div class="container-first-to-start" id="first-to-start" style="display: none;">
                 <br>
                 <p1><b>First to start:</b></p1>
                 <br>
